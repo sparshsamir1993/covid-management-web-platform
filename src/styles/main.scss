@@ -1,0 +1,19 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+.app-background {
+  min-height: calc(100vh-64px);
+}
+.nav-link {
+  color: rgba(0, 0, 0, 0.87);
+  text-decoration: none;
+  display: inherit;
+}
+.container {
+  margin: 0 auto;
+  margin-top: 64px;
+}
+.makeStyles-drawer-6 {
+  width: 0;
+}
