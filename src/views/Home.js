@@ -1,12 +1,7 @@
 import React, { Component, useState } from "react";
-import {
-  Grid,
-  Button,
-  RootRef,
-  makeStyles,
-  Typography,
-} from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { Grid, makeStyles, Typography } from "@material-ui/core";
+
+import LoginForm from "../components/authComponents/LoginForm";
 
 const useStyles = makeStyles(() => ({
   logoArea: {
@@ -29,10 +24,6 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const LinkBehavior = React.forwardRef((props, ref) => (
-  <Link ref={ref} to="/" {...props} />
-));
-
 const Home = () => {
   const [isLogin, setAuthState] = useState(true);
   const classes = useStyles();
@@ -41,21 +32,14 @@ const Home = () => {
       <Grid item xs={4} className={classes.logoArea}></Grid>
       <Grid item xs={8} className={classes.rightArea}>
         <div className={classes.actionArea}>
-          {isLogin && (
-            <React.Fragment>
-              <Typography variant="h4" gutterBottom>
-                Log into Hospital Dashboard
-              </Typography>
-              <Button component={LinkBehavior} variant="outlined">
-                Default
-              </Button>
-            </React.Fragment>
-          )}
+          {isLogin && <LoginForm />}
           <Typography
             variant="subtitle1"
             onClick={() => setAuthState(!isLogin)}
           >
-            New User? Create an account.
+            {isLogin
+              ? "New User? Create an account."
+              : "Already got an Accout? Log in."}
           </Typography>
         </div>
       </Grid>
