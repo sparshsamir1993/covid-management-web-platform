@@ -2,6 +2,7 @@ import React, { Component, useState } from "react";
 import { Grid, makeStyles, Typography } from "@material-ui/core";
 
 import LoginForm from "../components/authComponents/LoginForm";
+import SignUpForm from "../components/authComponents/SignUpForm";
 
 const useStyles = makeStyles(() => ({
   logoArea: {
@@ -33,6 +34,7 @@ const Home = () => {
       <Grid item xs={8} className={classes.rightArea}>
         <div className={classes.actionArea}>
           {isLogin && <LoginForm />}
+          {!isLogin && <SignUpForm />}
           <Typography
             variant="subtitle1"
             onClick={() => setAuthState(!isLogin)}

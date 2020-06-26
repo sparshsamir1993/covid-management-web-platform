@@ -20,6 +20,7 @@ import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import { Link } from "react-router-dom";
 import RouterSwitch from "./RouterSwitch";
+import Loader from "./loader/Loader";
 
 const drawerWidth = 240;
 
@@ -169,6 +170,7 @@ export default function Header() {
         </Drawer>
       </div>
       <RouterSwitch />
+      <Loader />
     </div>
   );
 }

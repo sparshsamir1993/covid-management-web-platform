@@ -1,38 +1,42 @@
 import React from "react";
 import { Typography, Button, Grid } from "@material-ui/core";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Field, reduxForm, SubmissionError, stopSubmit } from "redux-form";
 import { FormField } from "./FormField";
 import { connect } from "react-redux";
-import { loginUser, showLoading, hideLoading } from "../../actions";
+import { registerUser, showLoading, hideLoading } from "../../actions";
 
 const LinkBehavior = React.forwardRef((props, ref) => (
   <Link ref={ref} to="/aa" {...props} />
 ));
 
-let LoginForm = (props) => {
-  let history = useHistory();
+let SignUpForm = (props) => {
   const submitLogin = async (values, dispatch) => {
-    console.log(props);
+    console.log(values);
 
-    let { email, password } = values;
+    let { email, password, confirmPassword } = values;
 
-    if (!email || !password) {
-      console.log("eroor is iheere");
+    if (!email || !password || !confirmPassword) {
       throw new SubmissionError({
-        _error: "Please make sure email and password is provided",
+        _error:
+          "Please make sure email, password & confirm password is provided",
+      });
+    }
+    if (password !== confirmPassword) {
+      throw new SubmissionError({
+        _error: "Passwords do not match",
       });
     }
     dispatch(stopSubmit("loginForm", {}));
     props.showLoading();
-    await props.loginUser(values, history);
+    await props.registerUser(values);
     props.hideLoading();
   };
   const { error, handleSubmit, pristine, reset, submitting } = props;
   return (
     <form onSubmit={handleSubmit(submitLogin)}>
       <Typography variant="h4" gutterBottom>
-        Log into Hospital Dashboard
+        Sign up with us.
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12}>
@@ -40,7 +44,7 @@ let LoginForm = (props) => {
             key="email"
             type="email"
             name="email"
-            label="email"
+            label="Email"
             component={FormField}
           />
         </Grid>
@@ -51,7 +55,18 @@ let LoginForm = (props) => {
             key="password"
             type="password"
             name="password"
-            label="password"
+            label="Password"
+            component={FormField}
+          />
+        </Grid>
+      </Grid>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <Field
+            key="confirmPassword"
+            type="password"
+            name="confirmPassword"
+            label="Confirm Password"
             component={FormField}
           />
         </Grid>
@@ -62,7 +77,7 @@ let LoginForm = (props) => {
         </div>
       )}
       <Button type="submit" disabled={submitting} variant="outlined">
-        Log in
+        Register
       </Button>
     </form>
   );
@@ -74,10 +89,12 @@ const mapStateToProps = (state) => {
     formValues,
   };
 };
-LoginForm = reduxForm({
-  form: "loginForm",
-})(LoginForm);
-LoginForm = connect(mapStateToProps, { loginUser, showLoading, hideLoading })(
-  LoginForm
-);
-export default LoginForm;
+SignUpForm = reduxForm({
+  form: "signUpForm",
+})(SignUpForm);
+SignUpForm = connect(mapStateToProps, {
+  registerUser,
+  showLoading,
+  hideLoading,
+})(SignUpForm);
+export default SignUpForm;
