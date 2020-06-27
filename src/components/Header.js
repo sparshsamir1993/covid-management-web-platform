@@ -21,12 +21,17 @@ import MailIcon from "@material-ui/icons/Mail";
 import { Link } from "react-router-dom";
 import RouterSwitch from "./RouterSwitch";
 import Loader from "./loader/Loader";
+import { Button } from "@material-ui/core";
+import HeaderButtons from "./authComponents/HeaderButtons";
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
+  },
+  title: {
+    flexGrow: 1,
   },
   appBar: {
     transition: theme.transitions.create(["margin", "width"], {
@@ -114,9 +119,10 @@ export default function Header() {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h5" noWrap>
+            <Typography variant="h5" className={classes.title} noWrap>
               Covid Fighter
             </Typography>
+            <HeaderButtons />
           </Toolbar>
         </AppBar>
         <Drawer

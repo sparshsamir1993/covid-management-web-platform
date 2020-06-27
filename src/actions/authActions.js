@@ -24,10 +24,14 @@ export const getUser = (tokens) => async (dispatch) => {
   let config = {
     headers: {
       authorization: `JWT ${tokens.token}`,
-      "refresh-token": tokens.refrshToken,
+      "refresh-token": tokens.refreshToken,
     },
   };
   const user = await axios.get(`${BASE_URL}/get`, config);
+  console.log("head is");
+  let token = user.headers.token;
+  let refreshToken = user.headers["refresh-token"];
+  checkAndUpdateTokens(token, refreshToken);
   dispatch({ type: "FETCH_USER", payload: user.data });
 };
 
