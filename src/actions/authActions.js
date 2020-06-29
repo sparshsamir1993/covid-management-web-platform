@@ -1,23 +1,34 @@
 import axios from "axios";
 import { API_BASE_URL } from "../constants";
 import { checkAndUpdateTokens, checkStoredTokens } from "../utils";
+import { showError } from "./errorActions";
 const BASE_URL = `${API_BASE_URL}/user`;
 
+const errHandler = (err) => (dispatch) => {
+  console.log(err.response);
+  if (err.response.code) {
+    dispatch(showError({ type: "error", content: "user present" }));
+  }
+};
 export const loginUser = (body, history) => async (dispatch) => {
-  console.log(body);
-
   const user = await axios.post(`${BASE_URL}/login`, body);
-
   let { token, refreshToken } = user.data;
   console.log(token, refreshToken);
   let tokens = checkAndUpdateTokens(token, refreshToken);
-  console.log("finding user iis \n\n\n\n");
-  // dispatch({ type: "FETCH_USER", payload: user.data });
-  // history.go();
   dispatch(await getUser(tokens, history));
 };
+
 export const registerUser = (body) => async (dispatch) => {
-  console.log(body);
+  let { email, password } = body;
+  try {
+    const user = await axios.post(`${BASE_URL}/signup`, { email, password });
+    console.log(user);
+  } catch (err) {
+    console.log(err.response);
+    if (err.response?.status) {
+      dispatch(showError({ type: "error", content: "User already present" }));
+    }
+  }
 };
 
 export const getUser = (tokens) => async (dispatch) => {

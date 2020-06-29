@@ -14,7 +14,6 @@ const Loader = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  console.log(state);
   return {
     loading: state.loading.loading,
   };

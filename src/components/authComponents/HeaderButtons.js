@@ -43,7 +43,10 @@ const HeaderButtons = (props) => {
       <h2 id="simple-modal-title">You sure?</h2>
       <p id="simple-modal-description">Are you sure you want to log out?</p>
       <Button color="inherit" onClick={() => props.logoutUser()}>
-        Logout
+        Sure, Logout
+      </Button>
+      <Button color="inherit" onClick={handleClose}>
+        Cancel
       </Button>
     </div>
   );

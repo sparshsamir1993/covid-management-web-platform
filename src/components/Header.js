@@ -23,6 +23,8 @@ import RouterSwitch from "./RouterSwitch";
 import Loader from "./loader/Loader";
 import { Button } from "@material-ui/core";
 import HeaderButtons from "./authComponents/HeaderButtons";
+import { connect } from "react-redux";
+import ErrorAlert from "./errorComponents/ErrorAlert";
 
 const drawerWidth = 240;
 
@@ -86,7 +88,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Header() {
+const Header = (props) => {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -99,9 +101,85 @@ export default function Header() {
     setOpen(false);
   };
 
+  const authLinks = () => {
+    return (
+      <React.Fragment>
+        <List>
+          <ListItem button key={"Home"}>
+            <Link to="/aa" className="nav-link">
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Home"} />
+            </Link>
+          </ListItem>
+          <ListItem button key={"Dashboard"}>
+            <Link to="/aa" className="nav-link">
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Dashboard"} />
+            </Link>
+          </ListItem>
+          <ListItem button key={"PRofile"}>
+            <Link to="/aa" className="nav-link">
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Profile"} />
+            </Link>
+          </ListItem>
+        </List>
+        <Divider />
+        <List>
+          <ListItem button key={"Logout"}>
+            <Link to="/aa" className="nav-link">
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Logout"} />
+            </Link>
+          </ListItem>
+        </List>
+      </React.Fragment>
+    );
+  };
+
+  const unAuthLinks = () => {
+    return (
+      <List>
+        <ListItem button key={"Home"}>
+          <Link to="/aa" className="nav-link">
+            <ListItemIcon>
+              <InboxIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Home"} />
+          </Link>
+        </ListItem>
+        <ListItem button key={"Login"}>
+          <Link to="/aa" className="nav-link">
+            <ListItemIcon>
+              <InboxIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Login"} />
+          </Link>
+        </ListItem>
+        <ListItem button key={"Register"}>
+          <Link to="/aa" className="nav-link">
+            <ListItemIcon>
+              <InboxIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Register"} />
+          </Link>
+        </ListItem>
+      </List>
+    );
+  };
+
   return (
     <div>
       <div className={classes.root}>
+        <ErrorAlert />
         <CssBaseline />
         <AppBar
           position="fixed"
@@ -144,39 +222,21 @@ export default function Header() {
             </IconButton>
           </div>
           <Divider />
-          <List>
-            <ListItem button key={"Home"}>
-              <Link to="/aa" className="nav-link">
-                <ListItemIcon>
-                  <InboxIcon />
-                </ListItemIcon>
-                <ListItemText primary={"Home"} />
-              </Link>
-            </ListItem>
-            {["Home", "Starred", "Send email", "Drafts"].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-          </List>
-          <Divider />
-          <List>
-            {["All mail", "Trash", "Spam"].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-          </List>
+
+          {props.auth.id && authLinks()}
+          {!props.auth.id && unAuthLinks()}
         </Drawer>
       </div>
       <RouterSwitch />
       <Loader />
     </div>
   );
-}
+};
+
+const mapStateToProps = (state) => {
+  return {
+    auth: state.auth,
+  };
+};
+
+export default connect(mapStateToProps)(Header);

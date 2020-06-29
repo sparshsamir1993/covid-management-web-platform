@@ -11,7 +11,7 @@ const LinkBehavior = React.forwardRef((props, ref) => (
 ));
 
 let SignUpForm = (props) => {
-  const submitLogin = async (values, dispatch) => {
+  const submitSignup = async (values, dispatch) => {
     console.log(values);
 
     let { email, password, confirmPassword } = values;
@@ -27,14 +27,14 @@ let SignUpForm = (props) => {
         _error: "Passwords do not match",
       });
     }
-    dispatch(stopSubmit("loginForm", {}));
+    dispatch(stopSubmit("signUpForm", {}));
     props.showLoading();
     await props.registerUser(values);
     props.hideLoading();
   };
   const { error, handleSubmit, pristine, reset, submitting } = props;
   return (
-    <form onSubmit={handleSubmit(submitLogin)}>
+    <form onSubmit={handleSubmit(submitSignup)}>
       <Typography variant="h4" gutterBottom>
         Sign up with us.
       </Typography>
