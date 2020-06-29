@@ -1,12 +1,12 @@
 import { combineReducers } from "redux";
 import authReducer from "./authReducer";
 import loadingReducer from "./loadingReducer";
-import errorReducer from "./errorReducer";
+import alertReducer from "./alertReducer";
 var formReducer = require("redux-form").reducer;
 
 export default combineReducers({
   auth: authReducer,
   form: formReducer,
   loading: loadingReducer,
-  error: errorReducer,
+  error: alertReducer,
 });

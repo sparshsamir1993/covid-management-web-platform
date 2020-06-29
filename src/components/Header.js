@@ -24,7 +24,7 @@ import Loader from "./loader/Loader";
 import { Button } from "@material-ui/core";
 import HeaderButtons from "./authComponents/HeaderButtons";
 import { connect } from "react-redux";
-import ErrorAlert from "./errorComponents/ErrorAlert";
+import ErrorAlert from "./alertComponent/CommonAlert";
 
 const drawerWidth = 240;
 

@@ -11,10 +11,10 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const ErrorAlert = (props) => {
+const CommonAlert = (props) => {
   const classes = useStyles();
-  const { showError, type, content } = props;
-  if (!showError) {
+  const { showAlert, type, content } = props;
+  if (!showAlert) {
     return null;
   }
   return (
@@ -27,10 +27,10 @@ const ErrorAlert = (props) => {
 const mapStateToProps = (state) => {
   console.log(state.error);
   return {
-    showError: state.error.showError,
+    showAlert: state.error.showAlert,
     type: state.error?.error.type,
     content: state.error?.error.content,
   };
 };
 
-export default connect(mapStateToProps)(ErrorAlert);
+export default connect(mapStateToProps)(CommonAlert);

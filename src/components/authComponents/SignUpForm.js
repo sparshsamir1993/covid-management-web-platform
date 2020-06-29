@@ -1,6 +1,6 @@
 import React from "react";
 import { Typography, Button, Grid } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Field, reduxForm, SubmissionError, stopSubmit } from "redux-form";
 import { FormField } from "./FormField";
 import { connect } from "react-redux";
@@ -11,6 +11,7 @@ const LinkBehavior = React.forwardRef((props, ref) => (
 ));
 
 let SignUpForm = (props) => {
+  let history = useHistory();
   const submitSignup = async (values, dispatch) => {
     console.log(values);
 
@@ -29,7 +30,7 @@ let SignUpForm = (props) => {
     }
     dispatch(stopSubmit("signUpForm", {}));
     props.showLoading();
-    await props.registerUser(values);
+    await props.registerUser(values, history);
     props.hideLoading();
   };
   const { error, handleSubmit, pristine, reset, submitting } = props;

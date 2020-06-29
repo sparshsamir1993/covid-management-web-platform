@@ -1,32 +1,45 @@
 import axios from "axios";
 import { API_BASE_URL } from "../constants";
 import { checkAndUpdateTokens, checkStoredTokens } from "../utils";
-import { showError } from "./errorActions";
+import { showAlert } from "./alertActions";
 const BASE_URL = `${API_BASE_URL}/user`;
 
-const errHandler = (err) => (dispatch) => {
-  console.log(err.response);
-  if (err.response.code) {
-    dispatch(showError({ type: "error", content: "user present" }));
+export const loginUser = (body, history) => async (dispatch) => {
+  try {
+    const user = await axios.post(`${BASE_URL}/login`, body);
+    let { token, refreshToken } = user.data;
+    console.log(token, refreshToken);
+    let tokens = checkAndUpdateTokens(token, refreshToken);
+    dispatch(await getUser(tokens, history));
+    dispatch(
+      showAlert({ type: "success", content: "Signed in Successfully !!" })
+    );
+  } catch (err) {
+    console.log(err.response);
+    if (
+      err.response &&
+      (err.response.status === 403 || err.response.status === 401)
+    ) {
+      dispatch(showAlert({ type: "error", content: err.response.data }));
+    }
   }
 };
-export const loginUser = (body, history) => async (dispatch) => {
-  const user = await axios.post(`${BASE_URL}/login`, body);
-  let { token, refreshToken } = user.data;
-  console.log(token, refreshToken);
-  let tokens = checkAndUpdateTokens(token, refreshToken);
-  dispatch(await getUser(tokens, history));
-};
 
-export const registerUser = (body) => async (dispatch) => {
+export const registerUser = (body, history) => async (dispatch) => {
   let { email, password } = body;
   try {
     const user = await axios.post(`${BASE_URL}/signup`, { email, password });
-    console.log(user);
+    if (user.status === 200) {
+      dispatch(
+        showAlert({ type: "success", content: "Registered successfully" })
+      );
+      window.location.reload();
+    }
   } catch (err) {
-    console.log(err.response);
     if (err.response?.status) {
-      dispatch(showError({ type: "error", content: "User already present" }));
+      if (err.response.status === 403) {
+        dispatch(showAlert({ type: "error", content: "User already present" }));
+      }
     }
   }
 };
@@ -39,7 +52,7 @@ export const getUser = (tokens) => async (dispatch) => {
     },
   };
   const user = await axios.get(`${BASE_URL}/get`, config);
-  console.log("head is");
+
   let token = user.headers.token;
   let refreshToken = user.headers["refresh-token"];
   checkAndUpdateTokens(token, refreshToken);
@@ -52,5 +65,6 @@ export const logoutUser = () => (dispatch) => {
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("refreshToken");
   }
+  dispatch(showAlert({ type: "error", content: "Logged Out !!" }));
   dispatch({ type: "FETCH_USER", payload: {} });
 };
