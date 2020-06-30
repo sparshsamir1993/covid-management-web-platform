@@ -25,6 +25,7 @@ import { Button } from "@material-ui/core";
 import HeaderButtons from "./authComponents/HeaderButtons";
 import { connect } from "react-redux";
 import ErrorAlert from "./alertComponent/CommonAlert";
+import { ADMIN_ROLE, HOSPITAL_ADMIN_ROLE } from "../constants";
 
 const drawerWidth = 240;
 
@@ -100,7 +101,29 @@ const Header = (props) => {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
+  const adminLinks = () => {
+    if (props.auth.role === ADMIN_ROLE) {
+      return (
+        <React.Fragment>
+          <List>
+            <ListItem button key={"User List"}>
+              <Link to="/admin/users" className="nav-link">
+                <ListItemIcon>
+                  <InboxIcon />
+                </ListItemIcon>
+                <ListItemText primary={"User List"} />
+              </Link>
+            </ListItem>
+          </List>
+          <Divider />
+        </React.Fragment>
+      );
+    } else if (props.auth.role === HOSPITAL_ADMIN_ROLE) {
+      return null;
+    } else {
+      return null;
+    }
+  };
   const authLinks = () => {
     return (
       <React.Fragment>
@@ -121,7 +144,7 @@ const Header = (props) => {
               <ListItemText primary={"Dashboard"} />
             </Link>
           </ListItem>
-          <ListItem button key={"PRofile"}>
+          <ListItem button key={"Profile"}>
             <Link to="/aa" className="nav-link">
               <ListItemIcon>
                 <InboxIcon />
@@ -131,6 +154,7 @@ const Header = (props) => {
           </ListItem>
         </List>
         <Divider />
+        {adminLinks()}
         <List>
           <ListItem button key={"Logout"}>
             <Link to="/aa" className="nav-link">

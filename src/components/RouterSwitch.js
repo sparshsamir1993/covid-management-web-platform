@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import Dashboard from "../views/Dashboard";
 import { checkAndUpdateTokens } from "../utils";
 import { getUser, showLoading, hideLoading } from "../actions";
+import UserList from "../views/admin/UserList";
 
 const { BrowserRouter, Route, Switch } = require("react-router-dom");
 const { default: Header } = require("./Header");
@@ -24,6 +25,7 @@ const RouterSwitch = (props) => {
     <div className="container">
       <Switch>
         <Route exact path="/" component={props.auth.id ? Dashboard : Home} />
+        <Route exact path="/admin/users" component={UserList} />
       </Switch>
     </div>
   );
