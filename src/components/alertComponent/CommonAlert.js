@@ -25,7 +25,6 @@ const CommonAlert = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  console.log(state.error);
   return {
     showAlert: state.error.showAlert,
     type: state.error?.error.type,

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Button } from "@material-ui/core";
-import { logoutUser } from "../actions";
+import { logoutUser } from "../../actions";
 import { connect } from "react-redux";
 
 // const Dashboard = () => {

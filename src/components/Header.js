@@ -26,6 +26,8 @@ import HeaderButtons from "./authComponents/HeaderButtons";
 import { connect } from "react-redux";
 import ErrorAlert from "./alertComponent/CommonAlert";
 import { ADMIN_ROLE, HOSPITAL_ADMIN_ROLE } from "../constants";
+import { showLoading, hideLoading, getUser } from "../actions";
+import { checkAndUpdateTokens } from "../utils";
 
 const drawerWidth = 240;
 
@@ -101,6 +103,17 @@ const Header = (props) => {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  const storedToken = window.sessionStorage.getItem("token");
+  const storedRefreshToken = window.sessionStorage.getItem("refreshToken");
+  let tokens;
+  if (storedToken && storedRefreshToken) {
+    tokens = checkAndUpdateTokens(storedToken, storedRefreshToken);
+    if (!props.auth.id) {
+      props.showLoading();
+      props.getUser(tokens);
+      props.hideLoading();
+    }
+  }
   const adminLinks = () => {
     if (props.auth.role === ADMIN_ROLE) {
       return (
@@ -181,7 +194,7 @@ const Header = (props) => {
           </Link>
         </ListItem>
         <ListItem button key={"Login"}>
-          <Link to="/aa" className="nav-link">
+          <Link to="/" className="nav-link">
             <ListItemIcon>
               <InboxIcon />
             </ListItemIcon>
@@ -202,6 +215,7 @@ const Header = (props) => {
 
   return (
     <div>
+      <Loader />
       <div className={classes.root}>
         <ErrorAlert />
         <CssBaseline />
@@ -252,7 +266,6 @@ const Header = (props) => {
         </Drawer>
       </div>
       <RouterSwitch />
-      <Loader />
     </div>
   );
 };
@@ -263,4 +276,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps, { showLoading, hideLoading, getUser })(
+  Header
+);

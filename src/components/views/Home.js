@@ -1,8 +1,8 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 import { Grid, makeStyles, Typography } from "@material-ui/core";
 
-import LoginForm from "../components/authComponents/LoginForm";
-import SignUpForm from "../components/authComponents/SignUpForm";
+import LoginForm from "../authComponents/LoginForm";
+import SignUpForm from "../authComponents/SignUpForm";
 
 const useStyles = makeStyles(() => ({
   logoArea: {

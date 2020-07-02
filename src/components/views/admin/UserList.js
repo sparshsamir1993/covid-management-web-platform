@@ -1,30 +1,37 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { ADMIN_ROLE } from "../../constants";
-import { getUser, getUserList } from "../../actions";
-import { checkStoredTokens } from "../../utils";
+import { ADMIN_ROLE } from "../../../constants";
+import {
+  getUser,
+  getUserList,
+  showLoading,
+  hideLoading,
+} from "../../../actions";
+import { checkStoredTokens } from "../../../utils";
 import { Container } from "@material-ui/core";
 
 // imports for material table
 import { forwardRef } from "react";
-
-import AddBox from "@material-ui/icons/AddBox";
-import ArrowDownward from "@material-ui/icons/ArrowDownward";
-import Check from "@material-ui/icons/Check";
-import ChevronLeft from "@material-ui/icons/ChevronLeft";
-import ChevronRight from "@material-ui/icons/ChevronRight";
-import Clear from "@material-ui/icons/Clear";
-import DeleteOutline from "@material-ui/icons/DeleteOutline";
-import Edit from "@material-ui/icons/Edit";
-import FilterList from "@material-ui/icons/FilterList";
-import FirstPage from "@material-ui/icons/FirstPage";
-import LastPage from "@material-ui/icons/LastPage";
-import Remove from "@material-ui/icons/Remove";
-import SaveAlt from "@material-ui/icons/SaveAlt";
-import Search from "@material-ui/icons/Search";
-import ViewColumn from "@material-ui/icons/ViewColumn";
+import {
+  AddBox,
+  ArrowDownward,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  Clear,
+  DeleteOutline,
+  Edit,
+  FilterList,
+  FirstPage,
+  Remove,
+  LastPage,
+  SaveAlt,
+  Search,
+  ViewColumn,
+} from "@material-ui/icons";
 import MaterialTable from "material-table";
+
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
   Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
@@ -52,16 +59,14 @@ const tableIcons = {
 const UserList = (props) => {
   const history = useHistory();
   const [adminUserList, changeAdminUserList] = useState([]);
-  // const addAdminUsers = (newUsers) => {
-  //   console.log([...newUsers]);
-  //   changeAdminUserList([...newUsers]);
-  // };
   useEffect(() => {
     let isCurrent = false;
     const tokens = checkStoredTokens();
     const checkUser = async () => {
+      props.showLoading();
       await props.getUser(tokens);
-      await props.getUserList();
+      await props.getUserList(props.history);
+      props.hideLoading();
       if (props.adminUserList.length > 1) {
         console.log(props.adminUserList.length);
         changeAdminUserList([...props.adminUserList]);
@@ -69,6 +74,7 @@ const UserList = (props) => {
         props.adminUserList.map((user) => {
           console.log(user);
           userFields.push({
+            id: user.id,
             email: user.email,
             name: user.name,
             role: user.role,
@@ -88,6 +94,7 @@ const UserList = (props) => {
   }, [props.adminUserList.length]);
 
   const tableColumns = [
+    { title: "Id", field: "id" },
     { title: "Email", field: "email" },
     { title: "Name", field: "name" },
     { title: "Role", field: "role" },
@@ -95,7 +102,6 @@ const UserList = (props) => {
   let userFields = [];
 
   const userListData = async () => {};
-  console.log(userFields);
 
   return (
     <Container maxWidth="lg">
@@ -107,6 +113,16 @@ const UserList = (props) => {
         options={{
           filtering: true,
         }}
+        actions={[
+          {
+            icon: () => <Edit />,
+            tooltip: "Edit User",
+            onClick: (event, rowData) => {
+              console.log(rowData);
+              history.push("/admin/users/edit", rowData);
+            },
+          },
+        ]}
       ></MaterialTable>
     </Container>
   );
@@ -119,4 +135,9 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { getUser, getUserList })(UserList);
+export default connect(mapStateToProps, {
+  getUser,
+  getUserList,
+  showLoading,
+  hideLoading,
+})(UserList);

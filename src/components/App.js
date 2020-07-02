@@ -3,7 +3,7 @@ import RecatDOM from "react-dom";
 import { BrowserRouter, Route } from "react-router-dom";
 
 import Header from "./Header";
-import Home from "../views/Home";
+import Home from "./views/Home";
 
 import "../styles/main.scss";
 class App extends Component {
