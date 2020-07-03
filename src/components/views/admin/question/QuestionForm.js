@@ -9,7 +9,7 @@ const useStyles = makeStyles(() => ({}));
 
 let QuestionForm = (props) => {
   const classes = useStyles();
-  const { handleSubmit, submitQuestion, submitting, pristine } = props;
+  const { handleSubmit, submitQuestion, submitting, pristine, isEdit } = props;
   return (
     <React.Fragment>
       <form onSubmit={handleSubmit(submitQuestion)}>
@@ -20,7 +20,8 @@ let QuestionForm = (props) => {
           color="primary"
           type="submit"
         >
-          Submit
+          {isEdit && <span>Update</span>}
+          {!isEdit && <span>Submit</span>}
         </Button>
       </form>
     </React.Fragment>

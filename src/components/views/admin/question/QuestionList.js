@@ -63,7 +63,7 @@ const QuestionList = (props) => {
               tooltip: "Edit Question",
               onClick: (event, rowData) => {
                 console.log(rowData);
-                history.push("/admin/question/edit", rowData);
+                history.push("/admin/questions/edit", rowData);
               },
             },
           ]}

@@ -21,6 +21,11 @@ const RouterSwitch = (props) => {
 
         <Route exact path="/admin/questions" component={QuestionList} />
         <Route exact path="/admin/questions/new" component={QuestionFormPage} />
+        <Route
+          exact
+          path="/admin/questions/edit"
+          component={QuestionFormPage}
+        />
       </Switch>
     </div>
   );

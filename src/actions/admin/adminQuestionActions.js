@@ -51,5 +51,33 @@ export const createNewQuestion = (values, history) => async (dispatch) => {
     } else {
       history.replace("/");
     }
-  } catch (err) {}
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const updateQuestionSubmit = (values, history) => async (dispatch) => {
+  try {
+    let config = getHeaderConfigWithTokens();
+    if (config) {
+      console.log(values);
+      const question = await axios.patch(`${BASE_URL}`, values, config);
+      let tokens = checkResponseAuthHeaders(question.headers);
+      if (!tokens) {
+        dispatch(showAlert({ type: "error", content: "Error with tokens" }));
+        history.replace("/");
+      }
+      if (question.data && question.data.length > 0 && question.data[0] > 0) {
+        dispatch(showAlert({ type: "success", content: "Question Updated !" }));
+        dispatch({ type: "QUESTION_LIST_AFTER_UPDATE", payload: values });
+        history.push("/admin/questions");
+      } else {
+        dispatch(showAlert({ type: "error", content: "Not Updated !" }));
+      }
+    } else {
+      history.replace("/");
+    }
+  } catch (err) {
+    console.log(err);
+  }
 };
