@@ -10,9 +10,13 @@ import {
 import SaveIcon from "@material-ui/icons/Save";
 import { useHistory } from "react-router-dom";
 import { Field, reduxForm } from "redux-form";
-import RoleSelect from "../../../components/adminComponents/RoleSelect";
-import { USER_ROLE, ADMIN_ROLE, HOSPITAL_ADMIN_ROLE } from "../../../constants";
-import { updateUserRole, showLoading, hideLoading } from "../../../actions";
+import RoleSelect from "../../../adminComponents/RoleSelect";
+import {
+  USER_ROLE,
+  ADMIN_ROLE,
+  HOSPITAL_ADMIN_ROLE,
+} from "../../../../constants";
+import { updateUserRole, showLoading, hideLoading } from "../../../../actions";
 import { connect } from "react-redux";
 
 const useStyles = makeStyles(() => ({

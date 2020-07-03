@@ -118,6 +118,9 @@ const Header = (props) => {
     if (props.auth.role === ADMIN_ROLE) {
       return (
         <React.Fragment>
+          <Typography variant="h6" align="center">
+            Admin Links
+          </Typography>
           <List>
             <ListItem button key={"User List"}>
               <Link to="/admin/users" className="nav-link">
@@ -125,6 +128,14 @@ const Header = (props) => {
                   <InboxIcon />
                 </ListItemIcon>
                 <ListItemText primary={"User List"} />
+              </Link>
+            </ListItem>
+            <ListItem button key={"Question List"}>
+              <Link to="/admin/questions" className="nav-link">
+                <ListItemIcon>
+                  <InboxIcon />
+                </ListItemIcon>
+                <ListItemText primary={"Question List"} />
               </Link>
             </ListItem>
           </List>
@@ -142,7 +153,7 @@ const Header = (props) => {
       <React.Fragment>
         <List>
           <ListItem button key={"Home"}>
-            <Link to="/aa" className="nav-link">
+            <Link to="/" className="nav-link">
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
@@ -150,7 +161,7 @@ const Header = (props) => {
             </Link>
           </ListItem>
           <ListItem button key={"Dashboard"}>
-            <Link to="/aa" className="nav-link">
+            <Link to="/" className="nav-link">
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
@@ -158,7 +169,7 @@ const Header = (props) => {
             </Link>
           </ListItem>
           <ListItem button key={"Profile"}>
-            <Link to="/aa" className="nav-link">
+            <Link to="/" className="nav-link">
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
@@ -170,7 +181,7 @@ const Header = (props) => {
         {adminLinks()}
         <List>
           <ListItem button key={"Logout"}>
-            <Link to="/aa" className="nav-link">
+            <Link to="/" className="nav-link">
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
@@ -186,7 +197,7 @@ const Header = (props) => {
     return (
       <List>
         <ListItem button key={"Home"}>
-          <Link to="/aa" className="nav-link">
+          <Link to="/" className="nav-link">
             <ListItemIcon>
               <InboxIcon />
             </ListItemIcon>
@@ -202,7 +213,7 @@ const Header = (props) => {
           </Link>
         </ListItem>
         <ListItem button key={"Register"}>
-          <Link to="/aa" className="nav-link">
+          <Link to="/" className="nav-link">
             <ListItemIcon>
               <InboxIcon />
             </ListItemIcon>

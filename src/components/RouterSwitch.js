@@ -4,30 +4,23 @@ import { connect } from "react-redux";
 import Dashboard from "./views/Dashboard";
 import { checkAndUpdateTokens } from "../utils";
 import { getUser, showLoading, hideLoading } from "../actions";
-import UserList from "./views/admin/UserList";
-import UserEdit from "./views/admin/UserEdit";
+import UserList from "./views/admin/user/UserList";
+import UserEdit from "./views/admin/user/UserEdit";
+import QuestionList from "./views/admin/question/QuestionList";
+import QuestionFormPage from "./views/admin/question/QuestionFormPage";
 
 const { BrowserRouter, Route, Switch } = require("react-router-dom");
 const { default: Header } = require("./Header");
 const RouterSwitch = (props) => {
-  // const storedToken = window.sessionStorage.getItem("token");
-  // const storedRefreshToken = window.sessionStorage.getItem("refreshToken");
-  // let tokens;
-  // if (storedToken && storedRefreshToken) {
-  //   tokens = checkAndUpdateTokens(storedToken, storedRefreshToken);
-  //   if (!props.auth.id) {
-  //     props.showLoading();
-  //     props.getUser(tokens);
-  //     props.hideLoading();
-  //   }
-  // }
-
   return (
     <div className="container">
       <Switch>
         <Route exact path="/" component={props.auth.id ? Dashboard : Home} />
         <Route exact path="/admin/users" component={UserList} />
         <Route exact path="/admin/users/edit" component={UserEdit} />
+
+        <Route exact path="/admin/questions" component={QuestionList} />
+        <Route exact path="/admin/questions/new" component={QuestionFormPage} />
       </Switch>
     </div>
   );

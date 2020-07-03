@@ -24,11 +24,12 @@ body {
   top: 0;
   left: 0;
   background-color: #f8f8f8ad;
+  z-index: 1000;
 }
 
 .loader {
   left: 40%;
   top: 30%;
-  z-index: 1000;
+
   position: absolute;
 }
