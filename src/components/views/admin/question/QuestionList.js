@@ -3,7 +3,12 @@ import { Container, makeStyles, Button } from "@material-ui/core";
 import MaterialTable from "material-table";
 import { useHistory } from "react-router-dom";
 import tableIcons from "../../../tableIcons";
-import { showLoading, hideLoading, getQuestionList } from "../../../../actions";
+import {
+  showLoading,
+  hideLoading,
+  getQuestionList,
+  deleteQuestion,
+} from "../../../../actions";
 import { connect } from "react-redux";
 
 const tableColumns = [
@@ -66,6 +71,18 @@ const QuestionList = (props) => {
                 history.push("/admin/questions/edit", rowData);
               },
             },
+            {
+              icon: tableIcons.Delete,
+              tooltip: "Delete Question",
+              onClick: async (event, rowData) => {
+                console.log(rowData);
+                console.log(props);
+                props.showLoading();
+                await props.deleteQuestion(rowData.id);
+                props.hideLoading();
+                // history.push("/admin/questions/edit", rowData);
+              },
+            },
           ]}
         ></MaterialTable>
       </div>
@@ -81,4 +98,5 @@ export default connect(mapStateToProps, {
   showLoading,
   hideLoading,
   getQuestionList,
+  deleteQuestion,
 })(QuestionList);

@@ -81,3 +81,22 @@ export const updateQuestionSubmit = (values, history) => async (dispatch) => {
     console.log(err);
   }
 };
+
+export const deleteQuestion = (id, history) => async (dispatch) => {
+  try {
+    let config = getHeaderConfigWithTokens();
+    if (config) {
+      const result = await axios.delete(`${BASE_URL}/${id}`, config);
+      console.log(result);
+      if (result.status === 200) {
+        dispatch({ type: "QUESTION_LIST_AFTER_DELETE", payload: id });
+      } else {
+        dispatch(showAlert({ type: "error", content: "Not Deleted !" }));
+      }
+    } else {
+      history.replace("/");
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
