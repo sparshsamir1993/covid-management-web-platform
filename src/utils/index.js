@@ -1,4 +1,5 @@
 export const checkResponseAuthHeaders = (headers) => {
+  console.log(headers);
   if (headers.token && headers["refresh-token"]) {
     return checkAndUpdateTokens(headers.token, headers["refresh-token"]);
   } else {

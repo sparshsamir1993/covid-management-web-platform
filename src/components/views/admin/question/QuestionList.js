@@ -30,9 +30,7 @@ const QuestionList = (props) => {
   useEffect(() => {
     const updateQuestionList = async () => {
       props.showLoading();
-
       await props.getQuestionList();
-      console.log(props);
       if (props.questions?.length > 0) {
         console.log(props.questions);
         changeAdminQuestionList([...props.questions]);

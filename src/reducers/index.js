@@ -4,6 +4,7 @@ import loadingReducer from "./loadingReducer";
 import alertReducer from "./alertReducer";
 import adminUserReducer from "./admin/userReducer";
 import adminQuestionReducer from "./admin/questionReducer";
+import adminQuestionOptionReducer from "./admin/questionOptionReducer";
 var formReducer = require("redux-form").reducer;
 
 export default combineReducers({
@@ -13,4 +14,5 @@ export default combineReducers({
   error: alertReducer,
   adminUserList: adminUserReducer,
   adminQuestionList: adminQuestionReducer,
+  adminQuestionOptionList: adminQuestionOptionReducer,
 });

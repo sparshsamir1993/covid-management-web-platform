@@ -10,6 +10,7 @@ const BASE_URL = `${API_BASE_URL}/admin/user`;
 export const getUserList = (history) => async (dispatch) => {
   try {
     let config = getHeaderConfigWithTokens();
+    console.log(config);
     if (config) {
       const users = await axios.get(`${BASE_URL}`, config);
       let tokens = checkResponseAuthHeaders(users.headers);

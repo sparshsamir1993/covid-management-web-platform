@@ -122,7 +122,7 @@ const Header = (props) => {
             Admin Links
           </Typography>
           <List>
-            <ListItem button key={"User List"}>
+            <ListItem button key={"User List"} onClick={handleDrawerClose}>
               <Link to="/admin/users" className="nav-link">
                 <ListItemIcon>
                   <InboxIcon />
@@ -130,7 +130,7 @@ const Header = (props) => {
                 <ListItemText primary={"User List"} />
               </Link>
             </ListItem>
-            <ListItem button key={"Question List"}>
+            <ListItem button key={"Question List"} onClick={handleDrawerClose}>
               <Link to="/admin/questions" className="nav-link">
                 <ListItemIcon>
                   <InboxIcon />
@@ -152,7 +152,7 @@ const Header = (props) => {
     return (
       <React.Fragment>
         <List>
-          <ListItem button key={"Home"}>
+          <ListItem button key={"Home"} onClick={handleDrawerClose}>
             <Link to="/" className="nav-link">
               <ListItemIcon>
                 <InboxIcon />
@@ -160,7 +160,7 @@ const Header = (props) => {
               <ListItemText primary={"Home"} />
             </Link>
           </ListItem>
-          <ListItem button key={"Dashboard"}>
+          <ListItem button key={"Dashboard"} onClick={handleDrawerClose}>
             <Link to="/" className="nav-link">
               <ListItemIcon>
                 <InboxIcon />
@@ -168,7 +168,7 @@ const Header = (props) => {
               <ListItemText primary={"Dashboard"} />
             </Link>
           </ListItem>
-          <ListItem button key={"Profile"}>
+          <ListItem button key={"Profile"} onClick={handleDrawerClose}>
             <Link to="/" className="nav-link">
               <ListItemIcon>
                 <InboxIcon />
@@ -180,7 +180,7 @@ const Header = (props) => {
         <Divider />
         {adminLinks()}
         <List>
-          <ListItem button key={"Logout"}>
+          <ListItem button key={"Logout"} onClick={handleDrawerClose}>
             <Link to="/" className="nav-link">
               <ListItemIcon>
                 <InboxIcon />

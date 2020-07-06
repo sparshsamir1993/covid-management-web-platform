@@ -1,12 +1,14 @@
 import React from "react";
 
-import { makeStyles, Container } from "@material-ui/core";
+import { makeStyles, Container, Divider } from "@material-ui/core";
 import QuestionForm from "./QuestionForm";
 import { connect } from "react-redux";
 import {
   createNewQuestion,
   updateQuestionSubmit,
 } from "../../../../actions/admin/adminQuestionActions";
+import QuestionOptionForm from "./QuestionOptionForm";
+import QuestionOptionList from "./QuestionOptionsList";
 
 const useStyles = makeStyles(() => ({
   questionForm: {
@@ -44,6 +46,13 @@ let QuestionFormPage = (props) => {
           />
         )}
       </div>
+      {question && (
+        <React.Fragment>
+          <Divider />
+          <QuestionOptionList questionId={question.id} />
+          <QuestionOptionForm questionId={question.id} />
+        </React.Fragment>
+      )}
     </Container>
   );
 };
