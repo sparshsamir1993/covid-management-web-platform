@@ -138,6 +138,14 @@ const Header = (props) => {
                 <ListItemText primary={"Question List"} />
               </Link>
             </ListItem>
+            <ListItem button key={"Hospital List"} onClick={handleDrawerClose}>
+              <Link to="/admin/hospitals" className="nav-link">
+                <ListItemIcon>
+                  <InboxIcon />
+                </ListItemIcon>
+                <ListItemText primary={"Hospital List"} />
+              </Link>
+            </ListItem>
           </List>
           <Divider />
         </React.Fragment>

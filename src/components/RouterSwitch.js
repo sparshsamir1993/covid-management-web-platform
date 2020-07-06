@@ -8,6 +8,8 @@ import UserList from "./views/admin/user/UserList";
 import UserEdit from "./views/admin/user/UserEdit";
 import QuestionList from "./views/admin/question/QuestionList";
 import QuestionFormPage from "./views/admin/question/QuestionFormPage";
+import HospitalList from "./views/admin/hospital/HospitalList";
+import HospitalFormPage from "./views/admin/hospital/HospitalFormPage";
 
 const { BrowserRouter, Route, Switch } = require("react-router-dom");
 const { default: Header } = require("./Header");
@@ -26,6 +28,8 @@ const RouterSwitch = (props) => {
           path="/admin/questions/edit"
           component={QuestionFormPage}
         />
+        <Route exact path="/admin/hospitals" component={HospitalList} />
+        <Route exact path="/admin/hospitals/new" component={HospitalFormPage} />
       </Switch>
     </div>
   );
