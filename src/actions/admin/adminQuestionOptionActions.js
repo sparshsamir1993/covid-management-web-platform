@@ -61,6 +61,39 @@ export const createQuestionOption = (values, history) => async (dispatch) => {
   }
 };
 
+export const updateOption = (values, history) => async (dispatch) => {
+  try {
+    let config = getHeaderConfigWithTokens();
+    if (config) {
+      const option = await axios.patch(
+        `${BASE_URL}/${values.optionId}`,
+        values,
+        config
+      );
+      let tokens = checkResponseAuthHeaders(option.headers);
+      if (!tokens) {
+        dispatch(showAlert({ type: "error", content: "Error with tokens" }));
+      } else {
+        if (option.status == 200) {
+          console.log(option);
+          dispatch({
+            type: "QUESTION_OPTIONS_LIST_AFTER_UPDATE",
+            payload: values,
+          });
+          dispatch(
+            showAlert({
+              type: "success",
+              content: "Option Sucessfully updated !",
+            })
+          );
+        }
+      }
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const deleteQuestionOption = (option, history) => async (dispatch) => {
   try {
     let config = getHeaderConfigWithTokens();
@@ -92,7 +125,12 @@ export const deleteQuestionOption = (option, history) => async (dispatch) => {
   }
 };
 
-export const setQuestionOptionList = (values, history) => async (dispatch) => {
+export const setSelectedOption = (values, history) => async (dispatch) => {
   console.log(values);
-  dispatch({ type: "FETCH_ADMIN_QUESTION_OPTIONS_LIST", payload: values });
+  dispatch({ type: "SELECT_ANSWER_OPTION", payload: values });
+};
+
+export const deselectOption = (values, history) => async (dispatch) => {
+  console.log(values);
+  dispatch({ type: "DESELECT_ANSWER_OPTION", payload: values });
 };

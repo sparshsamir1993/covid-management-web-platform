@@ -59,6 +59,7 @@ let QuestionFormPage = (props) => {
 const mapStateToProps = (state) => {
   return {
     formValues: state.form.newQuestionForm,
+    selectedOption: state.selectedOption,
   };
 };
 export default connect(mapStateToProps, {

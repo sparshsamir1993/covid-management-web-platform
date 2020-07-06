@@ -10,11 +10,12 @@ import {
 } from "@material-ui/core";
 import FolderIcon from "@material-ui/icons/Folder";
 import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from "@material-ui/icons/Edit";
 import {
   showLoading,
   hideLoading,
   deleteQuestionOption,
-  setQuestionOptionList,
+  setSelectedOption,
   getQuestionOptionList,
 } from "../../../../actions";
 import { connect } from "react-redux";
@@ -45,9 +46,22 @@ let QuestionOptionList = (props) => {
           >
             <DeleteIcon />
           </IconButton>
+          <IconButton
+            edge="end"
+            aria-label="edit"
+            onClick={() => editOption(option)}
+          >
+            <EditIcon />
+          </IconButton>
         </ListItemSecondaryAction>
       </ListItem>
     ));
+  };
+
+  const editOption = async (option) => {
+    props.showLoading();
+    props.setSelectedOption(option);
+    props.hideLoading();
   };
 
   const deleteOption = async (option) => {
@@ -90,6 +104,6 @@ export default connect(mapStateToProps, {
   showLoading,
   hideLoading,
   deleteQuestionOption,
-  setQuestionOptionList,
+  setSelectedOption,
   getQuestionOptionList,
 })(QuestionOptionList);

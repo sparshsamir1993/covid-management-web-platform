@@ -9,9 +9,15 @@ export default function (state = [], action) {
     case "QUESTION_OPTION_LIST_AFTER_CREATE":
       return [...state, action.payload];
     case "QUESTION_OPTIONS_LIST_AFTER_UPDATE":
-      let qTbUpdated = state.filter((x) => x.id == action.payload.id);
-      qTbUpdated = { ...qTbUpdated, question: action.payload.question };
-      newState = [...state, qTbUpdated];
+      let qTbUpdated = state.filter((x) => x.id == action.payload.optionId)[0];
+      qTbUpdated = {
+        ...qTbUpdated,
+        optionContent: action.payload.optionContent,
+      };
+      newState = [
+        ...state.filter((x) => x.id !== action.payload.optionId),
+        qTbUpdated,
+      ];
       return newState;
     case "FETCH_ADMIN_QUESTION_OPTION_LIST_AFTER_DELETE":
       newState = state.filter((x) => x.id !== action.payload.optionId);

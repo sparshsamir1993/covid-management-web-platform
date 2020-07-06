@@ -12,7 +12,7 @@ export const getQuestionList = (history) => async (dispatch) => {
     let config = getHeaderConfigWithTokens();
     if (config) {
       console.log(config);
-      const questions = await axios.get(`${BASE_URL}/options`, config);
+      const questions = await axios.get(`${BASE_URL}`, config);
       let tokens = checkResponseAuthHeaders(questions.headers);
       if (!tokens) {
         dispatch(showAlert({ type: "error", content: "Error with tokens" }));
