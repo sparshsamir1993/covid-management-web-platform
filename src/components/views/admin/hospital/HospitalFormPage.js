@@ -7,6 +7,7 @@ import {
   hideLoading,
   showAlert,
   createNewHospital,
+  updateHospitalSubmit,
 } from "../../../../actions";
 import { useHistory } from "react-router-dom";
 
@@ -19,6 +20,7 @@ const useStyles = makeStyles(() => ({
 const HospitalFormPage = (props) => {
   const history = useHistory();
   const hospital = props.location?.state;
+  console.log(hospital);
   const classes = useStyles();
   const newHospitalSubmit = async (vals) => {
     const { name, contact, detailedAddress, lat, lng } = vals;
@@ -32,11 +34,12 @@ const HospitalFormPage = (props) => {
     props.hideLoading();
   };
   const updateHospitalSubmit = (vals) => {
-    const data = {
-      id: vals.values.id,
-      question: vals.values.question,
-    };
-    // props.updateQuestionSubmit(data, props.history);
+    console.log(vals);
+    const { name, contact, detailedAddress, lat, lng, id } = vals;
+    props.updateHospitalSubmit(
+      { name, contact, detailedAddress, lat, lng, id },
+      props.history
+    );
   };
   return (
     <Container maxWidth="lg">
@@ -74,4 +77,5 @@ export default connect(mapStateToProps, {
   showLoading,
   hideLoading,
   createNewHospital,
+  updateHospitalSubmit,
 })(HospitalFormPage);

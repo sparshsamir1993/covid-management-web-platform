@@ -30,6 +30,11 @@ const RouterSwitch = (props) => {
         />
         <Route exact path="/admin/hospitals" component={HospitalList} />
         <Route exact path="/admin/hospitals/new" component={HospitalFormPage} />
+        <Route
+          exact
+          path="/admin/hospitals/edit"
+          component={HospitalFormPage}
+        />
       </Switch>
     </div>
   );

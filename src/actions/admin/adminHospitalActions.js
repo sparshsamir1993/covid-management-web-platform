@@ -58,6 +58,31 @@ export const createNewHospital = (data, history) => async (dispatch) => {
   } catch (err) {}
 };
 
+export const updateHospitalSubmit = (data, history) => async (dispatch) => {
+  try {
+    let config = getHeaderConfigWithTokens();
+    if (config) {
+      const hostipal = await axios.patch(`${BASE_URL}`, data, config);
+      let tokens = checkResponseAuthHeaders(hostipal.headers);
+      if (!tokens) {
+        dispatch(showAlert({ type: "error", content: "Error with tokens" }));
+        history.replace("/");
+      }
+      if (hostipal.data && hostipal.data.length > 0 && hostipal.data[0] > 0) {
+        dispatch(showAlert({ type: "success", content: "Question Updated !" }));
+        dispatch({ type: "QUESTION_LIST_AFTER_UPDATE", payload: data });
+        history.push("/admin/hospitals");
+      } else {
+        dispatch(showAlert({ type: "error", content: "Not Updated !" }));
+      }
+    } else {
+      history.replace("/");
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const deleteHospital = () => async (dispatch) => {};
 
 export const setSelectedHospitalAddress = (data) => async (dispatch) => {

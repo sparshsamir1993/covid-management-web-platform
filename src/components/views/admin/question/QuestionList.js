@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { Container, makeStyles, Button } from "@material-ui/core";
 import MaterialTable from "material-table";
 import { useHistory } from "react-router-dom";
@@ -28,18 +28,20 @@ const QuestionList = (props) => {
   const [adminQuestionList, changeAdminQuestionList] = useState([]);
 
   useEffect(() => {
+    if (props.questions?.length > 0) {
+      console.log(props.questions);
+      changeAdminQuestionList([...props.questions]);
+    }
+  }, [props.questions]);
+
+  useLayoutEffect(() => {
     const updateQuestionList = async () => {
       props.showLoading();
       await props.getQuestionList();
-      if (props.questions?.length > 0) {
-        console.log(props.questions);
-        changeAdminQuestionList([...props.questions]);
-      }
       props.hideLoading();
     };
-
     updateQuestionList();
-  }, [props.questions.length + 1]);
+  }, []);
 
   return (
     <Container maxWidth="lg">

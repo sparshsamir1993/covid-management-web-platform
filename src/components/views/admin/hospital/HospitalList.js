@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { Container, makeStyles, Button } from "@material-ui/core";
 import MaterialTable from "material-table";
 import { useHistory } from "react-router-dom";
@@ -30,18 +30,20 @@ const HospitalList = (props) => {
   const [adminHospitalList, changeAdminHospitalList] = useState([]);
 
   useEffect(() => {
+    if (props.hospitals?.length > 0) {
+      console.log(props.hospitals);
+      changeAdminHospitalList([...props.hospitals]);
+    }
+  }, [props.hospitals]);
+
+  useLayoutEffect(() => {
     const updateHospitalList = async () => {
       props.showLoading();
       await props.getHospitalList();
-      if (props.hospitals?.length > 0) {
-        console.log(props.hospitals);
-        changeAdminHospitalList([...props.hospitals]);
-      }
       props.hideLoading();
     };
-
     updateHospitalList();
-  }, [props.hospitals]);
+  }, []);
 
   return (
     <Container maxWidth="lg">
