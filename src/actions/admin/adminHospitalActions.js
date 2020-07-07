@@ -83,7 +83,24 @@ export const updateHospitalSubmit = (data, history) => async (dispatch) => {
   }
 };
 
-export const deleteHospital = () => async (dispatch) => {};
+export const deleteHospital = (id, history) => async (dispatch) => {
+  try {
+    let config = getHeaderConfigWithTokens();
+    if (config) {
+      const result = await axios.delete(`${BASE_URL}/${id}`, config);
+      console.log(result);
+      if (result.status === 200) {
+        dispatch({ type: "HOSPITAL_LIST_AFTER_DELETE", payload: id });
+      } else {
+        dispatch(showAlert({ type: "error", content: "Not Deleted !" }));
+      }
+    } else {
+      history.replace("/");
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 export const setSelectedHospitalAddress = (data) => async (dispatch) => {
   dispatch({ type: "SET_HOSPITAL_ADDRESS", payload: data });

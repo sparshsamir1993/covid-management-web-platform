@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useLayoutEffect } from "react";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { ADMIN_ROLE } from "../../../../constants";
@@ -19,45 +19,25 @@ const UserList = (props) => {
   const [adminUserList, changeAdminUserList] = useState([]);
   if (!props.auth.id) {
     props.showLoading();
-  } else {
-    props.hideLoading();
   }
   useEffect(() => {
-    let isCurrent = false;
-    const tokens = checkStoredTokens();
+    if (props.adminUserList.length > 1) {
+      console.log(props.adminUserList.length);
+      changeAdminUserList([...props.adminUserList]);
+    }
+    if (props.auth.id && props.auth.role !== ADMIN_ROLE) {
+      history.replace("/");
+    }
+  }, [props.adminUserList]);
 
+  useLayoutEffect(() => {
     const checkUser = async () => {
       props.showLoading();
       await props.getUserList(props.history);
       props.hideLoading();
-
-      if (props.adminUserList.length > 1) {
-        console.log(props.adminUserList.length);
-        changeAdminUserList([...props.adminUserList]);
-        console.log(adminUserList);
-        props.adminUserList.map((user) => {
-          console.log(user);
-          userFields.push({
-            id: user.id,
-            email: user.email,
-            name: user.name,
-            role: user.role,
-          });
-        });
-        changeAdminUserList([...userFields]);
-        console.log(userFields);
-      }
-      if (props.auth.id && props.auth.role !== ADMIN_ROLE) {
-        history.replace("/");
-      }
     };
-
     checkUser();
-
-    return () => {
-      isCurrent = true;
-    };
-  }, [props.adminUserList.length]);
+  }, []);
 
   const tableColumns = [
     { title: "Id", field: "id" },

@@ -5,6 +5,10 @@ export default function (state = {}, action) {
       //   const userListObj = _.keyBy(action.payload.data, "id");
       //   console.log(action.payload);
       return action.payload || false;
+    case "HOSPITAL_LIST_AFTER_DELETE":
+      let newState = state.filter((x) => x.id !== action.payload);
+      return newState;
+
     default:
       return state;
   }

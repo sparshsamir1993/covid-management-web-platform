@@ -26,7 +26,9 @@ const QuestionList = (props) => {
   const classes = useStyles();
   const history = useHistory();
   const [adminQuestionList, changeAdminQuestionList] = useState([]);
-
+  if (!props.questions) {
+    props.showLoading();
+  }
   useEffect(() => {
     if (props.questions?.length > 0) {
       console.log(props.questions);
