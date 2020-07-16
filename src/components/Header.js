@@ -151,7 +151,36 @@ const Header = (props) => {
         </React.Fragment>
       );
     } else if (props.auth.role === HOSPITAL_ADMIN_ROLE) {
-      return null;
+      return (
+        <React.Fragment>
+          <Typography variant="h6" align="center">
+            Hospital Admin Links
+          </Typography>
+          <List>
+            <ListItem button key={"Patient List"} onClick={handleDrawerClose}>
+              <Link to="/hospital/users" className="nav-link">
+                <ListItemIcon>
+                  <InboxIcon />
+                </ListItemIcon>
+                <ListItemText primary={"Pateint List"} />
+              </Link>
+            </ListItem>
+            <ListItem
+              button
+              key={"Book Appointment"}
+              onClick={handleDrawerClose}
+            >
+              <Link to="/hospital/appointment/booking" className="nav-link">
+                <ListItemIcon>
+                  <InboxIcon />
+                </ListItemIcon>
+                <ListItemText primary={"Book Appointment"} />
+              </Link>
+            </ListItem>
+          </List>
+          <Divider />
+        </React.Fragment>
+      );
     } else {
       return null;
     }
