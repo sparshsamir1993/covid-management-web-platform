@@ -28,7 +28,6 @@ const HospitalFormPage = (props) => {
       props.showAlert({ type: "error", content: "Fill all fields" });
       return;
     }
-    // console.log(vals);
     props.showLoading();
     await props.createNewHospital(vals, history);
     props.hideLoading();

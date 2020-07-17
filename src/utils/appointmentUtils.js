@@ -8,7 +8,10 @@ export const generateAppointmentDates = () => {
     let nextDate = newDate.getDate();
     // const day = nextDate.toLocaleString("default", { month: "short" });
     const month = newDate.toLocaleString("default", { month: "short" });
-    dateArray.push(`${nextDate}-${month}`);
+    dateArray.push({
+      dateText: `${nextDate}-${month}`,
+      dateValue: `${nextDate}-${newDate.getMonth()}`,
+    });
   }
   return dateArray;
 };
@@ -25,7 +28,7 @@ export const generateAppointmentHours = () => {
     } else {
       hour = `${i - 12} pm`;
     }
-    hoursArr.push({ hour: hour, isBooked: false });
+    hoursArr.push({ hourText: hour, hourValue: i, isBooked: false });
   }
 
   return hoursArr;

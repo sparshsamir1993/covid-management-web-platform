@@ -10,6 +10,20 @@ import {
   generateAppointmentDates,
   generateAppointmentHours,
 } from "../../../../utils";
+const changeFormEmail = (newValue, props) => (dispatch) => {
+  let user = props.userList.filter((user) => user.email === newValue)[0];
+  let isNewUser = user?.email ? false : true;
+
+  dispatch(change("hAdminAppointmentForm", "email", newValue));
+  dispatch(change("hAdminAppointmentForm", "isNewUser", isNewUser));
+  console.log(user);
+  if (!isNewUser && user.id) {
+    dispatch(change("hAdminAppointmentForm", "name", user.name));
+    dispatch(change("hAdminAppointmentForm", "userId", user.id));
+  } else {
+    dispatch(change("hAdminAppointmentForm", "name", undefined));
+  }
+};
 let AppointmentForm = (props) => {
   const { handleSubmit, onAppointmentSubmit, pristine, submitting } = props;
 
@@ -21,34 +35,20 @@ let AppointmentForm = (props) => {
     const getUserListFromAPI = async () => {
       await props.getUserListForHospital();
     };
-
     getUserListFromAPI();
   }, []);
 
-  const changeFormEmail = (newValue) => (dispatch) => {
-    dispatch(change("hAdminAppointmentForm", "email", newValue));
-  };
-  const checkUserDetails = (newInput, dispatch) => {
-    console.log(newInput);
-    console.log(props.formValues);
-    changeFormEmail(newInput);
-    // props.change("email", newInput);
-  };
-  const MyButton = React.forwardRef((props, ref) => (
-    <option {...props} ref={ref}>
-      {props.children}
-    </option>
-  ));
-  const htmlOption = (props) => {
-    return <option>{props.children}</option>;
+  const checkUserDetails = (newInput) => {
+    console.log("ihi");
+    props.changeFormEmail(newInput, props);
   };
 
   const renderAppointmentDates = () => {
     const dates = generateAppointmentDates();
     return dates.map((date) => {
       return (
-        <option key={date} value={date}>
-          {date}
+        <option key={date.dateValue} value={date.dateValue}>
+          {date.dateText}
         </option>
       );
     });
@@ -57,8 +57,12 @@ let AppointmentForm = (props) => {
     const slots = generateAppointmentHours();
     return slots.map((slot) => {
       return (
-        <option key={slot.hour} value={slot.hour} disabled={slot.isBooked}>
-          {slot.hour}
+        <option
+          key={slot.hourValue}
+          value={slot.hourValue}
+          disabled={slot.isBooked}
+        >
+          {slot.hourText}
         </option>
       );
     });
@@ -76,7 +80,6 @@ let AppointmentForm = (props) => {
           label="email"
           name="email"
         ></Field>
-
         <Field
           type="text"
           component={MaterialTextField}
@@ -84,7 +87,8 @@ let AppointmentForm = (props) => {
           name="name"
         ></Field>
         <Field
-          name="selectedDay"
+          name="selectedDate"
+          label="Choose Date"
           component={MaterialSelect}
           {...{
             initialValue: props.initialValues ? props.initialValues : "",
@@ -94,7 +98,8 @@ let AppointmentForm = (props) => {
           {renderAppointmentDates()}
         </Field>
         <Field
-          name="selectedHour"
+          name="selectedTime"
+          label="Choose Time"
           component={MaterialSelect}
           {...{
             initialValue: props.initialValues ? props.initialValues : "",
@@ -117,16 +122,19 @@ let AppointmentForm = (props) => {
 };
 
 const mapStateToProps = (state) => {
+  // console.log(state.hospitalUserList);
   return {
     userList: state.hospitalUserList,
+    initialValues: { isNewUser: false },
     formValues: state.form.hAdminAppointmentForm,
   };
 };
 AppointmentForm = reduxForm({
   form: "hAdminAppointmentForm",
 })(AppointmentForm);
-AppointmentForm = connect(mapStateToProps, { getUserListForHospital })(
-  AppointmentForm
-);
+AppointmentForm = connect(mapStateToProps, {
+  getUserListForHospital,
+  changeFormEmail,
+})(AppointmentForm);
 
 export default AppointmentForm;

@@ -27,6 +27,7 @@ let MaterialAutoComplete = (props) => {
           {...params}
           {...input}
           {...custom}
+          autoComplete="no"
           label={label}
           variant="outlined"
         />
