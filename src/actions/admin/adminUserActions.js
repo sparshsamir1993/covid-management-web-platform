@@ -31,17 +31,18 @@ export const getUserList = (history) => async (dispatch) => {
   }
 };
 
-export const updateUserRole = (value, history) => async (dispatch) => {
+export const updateUserRole = (values, history) => async (dispatch) => {
   try {
-    console.log(value);
+    console.log(values);
     let config = getHeaderConfigWithTokens();
     if (config) {
-      const user = await axios.patch(`${BASE_URL}/updateRole`, value, config);
+      const user = await axios.patch(`${BASE_URL}/updateRole`, values, config);
       console.log(user.headers);
       let tokens = checkResponseAuthHeaders(user.headers);
       if (user.data && user.data.length > 0) {
         if (user.data[0] > 0) {
           dispatch(showAlert({ type: "success", content: "User Updated !" }));
+          history.goBack();
         } else {
           dispatch(showAlert({ type: "error", content: "User Not found" }));
         }

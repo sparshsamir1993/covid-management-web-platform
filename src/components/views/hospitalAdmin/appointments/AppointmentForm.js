@@ -74,6 +74,7 @@ let AppointmentForm = (props) => {
         <Field
           type="text"
           labelname="email"
+          allowNewInput={true}
           autoCompleteOptions={props.userList}
           handleInputChange={checkUserDetails}
           component={MaterialAutoComplete}

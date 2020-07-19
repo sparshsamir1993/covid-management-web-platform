@@ -2,6 +2,7 @@ import axios from "axios";
 import { API_BASE_URL } from "../constants";
 import { checkAndUpdateTokens, checkStoredTokens } from "../utils";
 import { showAlert } from "./alertActions";
+import { FETCH_HADMIN_HOSPITAL } from "../constants/reducerConstants";
 const BASE_URL = `${API_BASE_URL}/user`;
 
 export const loginUser = (body, history) => async (dispatch) => {
@@ -57,6 +58,13 @@ export const getUser = (tokens) => async (dispatch) => {
   let refreshToken = user.headers["refresh-token"];
   checkAndUpdateTokens(token, refreshToken);
   dispatch({ type: "FETCH_USER", payload: user.data });
+  if (user.data.hospitalAdmin?.id) {
+    console.log(user.data.hospitalAdmin);
+    dispatch({
+      type: FETCH_HADMIN_HOSPITAL,
+      payload: user.data.hospitalAdmin.hospital,
+    });
+  }
 };
 
 export const logoutUser = () => (dispatch) => {

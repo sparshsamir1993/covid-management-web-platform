@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import {
   Container,
   Grid,
@@ -9,49 +9,77 @@ import {
 } from "@material-ui/core";
 import SaveIcon from "@material-ui/icons/Save";
 import { useHistory } from "react-router-dom";
-import { Field, reduxForm } from "redux-form";
+import { Field, reduxForm, change } from "redux-form";
 import RoleSelect from "../../../adminComponents/RoleSelect";
 import {
   USER_ROLE,
   ADMIN_ROLE,
   HOSPITAL_ADMIN_ROLE,
 } from "../../../../constants";
-import { updateUserRole, showLoading, hideLoading } from "../../../../actions";
+import {
+  updateUserRole,
+  showLoading,
+  hideLoading,
+  getHospitalList,
+} from "../../../../actions";
 import { connect } from "react-redux";
+import MaterialAutoSelect from "../../../utilComponents/MaterialAutoComplete";
 
 const useStyles = makeStyles(() => ({
   itemStyle: {
     textAlign: "center",
   },
 }));
-const validate = (values) => {
+const validate = (values, props) => {
   const errors = {};
-  if (!values["role"]) {
+  if (!values["role"] && !props.location.state.role) {
     errors["role"] = "Required";
   }
-  console.log(errors);
+  console.log(values);
   return errors;
+};
+const setHospitalDetails = (hospital) => (dispatch) => {
+  dispatch(change("adminUserRole", "hospital", hospital));
 };
 
 let UserEdit = (props) => {
   const history = useHistory();
   const classes = useStyles();
+  const [isHAdmin, setURole] = React.useState(false);
   if (!props.location.state.email) {
     history.goBack();
   }
   const changeUserRole = async (values, dispatch) => {
     console.log(values);
     let data = {
-      role: values.role,
+      role: values.role ? values.role : props.location?.state?.role,
       id: props.location.state.id,
+      hospital: values.hospital,
     };
     props.showLoading();
     await props.updateUserRole(data, props.history);
     props.hideLoading();
-    props.history.goBack();
   };
 
-  const { handleSubmit, pristine, reset, submitting } = props;
+  useEffect(() => {
+    console.log(props.hospitalList);
+  }, [props.hospitalList]);
+
+  useLayoutEffect(() => {
+    const getHospitalListFromAPI = async () => {
+      await props.getHospitalList(history);
+    };
+    getHospitalListFromAPI();
+  }, []);
+  const hospitalSelectChange = (hospitalName) => {
+    const hospital = props.hospitalList.filter(
+      (hospital) => hospital.name === hospitalName
+    )[0];
+
+    props.setHospitalDetails(hospital);
+    // console.log(hospitalName);
+  };
+  const { handleSubmit, pristine, reset, submitting, hospitalList } = props;
   return (
     <Container maxWidth="lg">
       <form onSubmit={handleSubmit(changeUserRole)}>
@@ -95,6 +123,29 @@ let UserEdit = (props) => {
               <option value={HOSPITAL_ADMIN_ROLE}>{HOSPITAL_ADMIN_ROLE}</option>
             </Field>
           </Grid>
+          {props.selectedRole === HOSPITAL_ADMIN_ROLE && (
+            <Grid container spacing={4}>
+              <Grid item xs={6} className={classes.itemStyle}>
+                <Typography variant="h5">Name</Typography>
+              </Grid>
+              <Grid item xs={6} className={classes.itemStyle}>
+                <Field
+                  name="hospitalName"
+                  component={MaterialAutoSelect}
+                  allowNewInput={false}
+                  autoCompleteOptions={hospitalList}
+                  labelname="name"
+                  {...{
+                    initialValues: props.initialValues
+                      ? props.initialValues
+                      : "",
+                  }}
+                  handleInputChange={hospitalSelectChange}
+                  label="Select Hospital For user"
+                />
+              </Grid>
+            </Grid>
+          )}
           <Grid item xs={3} className={classes.itemStyle}>
             <IconButton
               aria-label="Save"
@@ -112,13 +163,25 @@ let UserEdit = (props) => {
 
 const mapStateToProps = (state, props) => {
   let iVal;
-  if (!state.form?.adminUserRole?.values?.role) {
+  let hName;
+  let hospitalList = state.adminHospitalList;
+  iVal = state.form?.adminUserRole?.values?.role;
+  hName = state.form?.adminUserRole?.values?.hospitalName;
+  if (!iVal) {
     iVal = props.history.location.state.role;
-  } else {
-    iVal = state.form?.adminUserRole?.values?.role;
   }
+  if (!hName) {
+    hName = hospitalList.filter(
+      (hospital) =>
+        hospital.id === props.history.location.state.hospitalAdmin?.hospitalId
+    )[0]?.name;
+    hName = hName ? hName : "";
+  }
+
   return {
-    initialValues: { role: iVal },
+    initialValues: { role: iVal, hospitalName: { name: hName } },
+    selectedRole: iVal,
+    hospitalList,
   };
 };
 
@@ -126,6 +189,8 @@ UserEdit = connect(mapStateToProps, {
   updateUserRole,
   showLoading,
   hideLoading,
+  getHospitalList,
+  setHospitalDetails,
 })(UserEdit);
 
 UserEdit = reduxForm({
