@@ -4,12 +4,16 @@ import { connect } from "react-redux";
 import MaterialTextField from "../../../utilComponents/MaterialTextField";
 import MaterialSelect from "../../../utilComponents/MaterialSelect";
 import MaterialAutoComplete from "../../../utilComponents/MaterialAutoComplete";
-import { getUserListForHospital } from "../../../../actions/hospitalAdmin/hAdminUserActions";
+import {
+  getUserListForHospital,
+  getHospitalAppointments,
+} from "../../../../actions";
 import { Button, MenuItem } from "@material-ui/core";
 import {
   generateAppointmentDates,
   generateAppointmentHours,
 } from "../../../../utils";
+import _ from "lodash";
 const changeFormEmail = (newValue, props) => (dispatch) => {
   let user = props.userList.filter((user) => user.email === newValue)[0];
   let isNewUser = user?.email ? false : true;
@@ -32,22 +36,37 @@ let AppointmentForm = (props) => {
   }, [props.userList]);
 
   useLayoutEffect(() => {
+    // for getting user list
     const getUserListFromAPI = async () => {
       await props.getUserListForHospital();
     };
     getUserListFromAPI();
   }, []);
 
+  useLayoutEffect(() => {
+    // for getting appointments
+    const getHospitalListFromAPI = async () => {
+      await props.getHospitalAppointments(props.myHospital.id);
+    };
+    if (props.myHospital?.id) {
+      getHospitalListFromAPI();
+    }
+  }, [props.myHospital]);
+
   const checkUserDetails = (newInput) => {
-    console.log("ihi");
     props.changeFormEmail(newInput, props);
   };
 
   const renderAppointmentDates = () => {
     const dates = generateAppointmentDates();
+
     return dates.map((date) => {
       return (
-        <option key={date.dateValue} value={date.dateValue}>
+        <option
+          key={date.dateValue}
+          value={date.dateValue}
+          disabled={date.isBooked}
+        >
           {date.dateText}
         </option>
       );
@@ -55,16 +74,49 @@ let AppointmentForm = (props) => {
   };
   const renderAppointmentHours = () => {
     const slots = generateAppointmentHours();
-    return slots.map((slot) => {
-      return (
-        <option
-          key={slot.hourValue}
-          value={slot.hourValue}
-          disabled={slot.isBooked}
-        >
-          {slot.hourText}
-        </option>
+    let selectedDateAppointments = [];
+    let bookedApTimes = [];
+    if (props.formValues?.values?.selectedDate) {
+      selectedDateAppointments = props.appointmentList.filter((appointment) => {
+        let selectedDate = props.formValues?.values?.selectedDate;
+        if (selectedDate) {
+          let year = new Date().getFullYear();
+          let date = selectedDate.split("-")[0];
+          let monthNumber = selectedDate.split("-")[1];
+          let appointmentDate = new Date(year, monthNumber, date);
+          console.log(appointment.appointmentDate, appointmentDate);
+          if (
+            new Date(appointment.appointmentDate).getDate() ==
+            new Date(appointmentDate).getDate()
+          ) {
+            return true;
+          }
+        }
+      });
+      bookedApTimes = selectedDateAppointments.map(
+        (appointment) => appointment.appointmentTime.split(":")?.[0]
       );
+      console.log(slots, bookedApTimes, selectedDateAppointments);
+    }
+    const unBookedSlots = slots.map((slot) => {
+      if (slot && bookedApTimes.includes(slot.hourValue + "")) {
+        slot.isBooked = true;
+      }
+      return slot;
+    });
+    console.log(unBookedSlots);
+    return unBookedSlots.map((slot) => {
+      if (slot) {
+        return (
+          <option
+            key={slot.hourValue}
+            value={slot.hourValue}
+            disabled={slot.isBooked}
+          >
+            {slot.hourText}
+          </option>
+        );
+      }
     });
   };
 
@@ -107,7 +159,7 @@ let AppointmentForm = (props) => {
           }}
         >
           <option value=""></option>
-          {renderAppointmentHours()}
+          {props.formValues?.values?.selectedDate && renderAppointmentHours()}
         </Field>
         <Button
           variant="contained"
@@ -128,6 +180,8 @@ const mapStateToProps = (state) => {
     userList: state.hospitalUserList,
     initialValues: { isNewUser: false },
     formValues: state.form.hAdminAppointmentForm,
+    myHospital: state.hospitalAdmin.myHospital,
+    appointmentList: state.hospitalAdmin.appointmentList,
   };
 };
 AppointmentForm = reduxForm({
@@ -136,6 +190,7 @@ AppointmentForm = reduxForm({
 AppointmentForm = connect(mapStateToProps, {
   getUserListForHospital,
   changeFormEmail,
+  getHospitalAppointments,
 })(AppointmentForm);
 
 export default AppointmentForm;

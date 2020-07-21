@@ -167,6 +167,19 @@ const Header = (props) => {
             </ListItem>
             <ListItem
               button
+              key={"Appointment List"}
+              onClick={handleDrawerClose}
+            >
+              <Link to="/hospital/appointment/list" className="nav-link">
+                <ListItemIcon>
+                  <InboxIcon />
+                </ListItemIcon>
+                <ListItemText primary={"Appointment List"} />
+              </Link>
+            </ListItem>
+
+            <ListItem
+              button
               key={"Book Appointment"}
               onClick={handleDrawerClose}
             >

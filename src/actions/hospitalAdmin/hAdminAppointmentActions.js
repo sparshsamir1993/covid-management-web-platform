@@ -14,21 +14,62 @@ const getMonthFromString = (mon) => {
   }
   return -1;
 };
+
+export const getHospitalAppointments = (hospitalId, history) => async (
+  dispatch
+) => {
+  try {
+    console.log(hospitalId);
+
+    let config = getHeaderConfigWithTokens();
+    if (config) {
+      let appointmentList = await axios.get(
+        `${BASE_URL}/list/${hospitalId}`,
+        config
+      );
+      let tokens = checkResponseAuthHeaders(appointmentList.headers);
+      if (!tokens) {
+        dispatch(showAlert({ type: "error", content: "Error with tokens" }));
+        history.replace("/");
+      }
+      dispatch({
+        type: FETCH_HADMIN_APPOINTMENT_LIST,
+        payload: appointmentList.data,
+      });
+    } else {
+      history.replace("/");
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const bookUserAppointment = (values, history) => async (dispatch) => {
   try {
-    let { selectedDate, selectedTime, email, name, isNewUser, userId } = values;
+    let {
+      selectedDate,
+      selectedTime,
+      email,
+      name,
+      isNewUser,
+      userId,
+      hospitalId,
+    } = values;
     console.log(selectedDate, selectedTime);
     let year = new Date().getFullYear();
     let date = selectedDate.split("-")[0];
     let monthNumber = selectedDate.split("-")[1];
-    let appointmentDateTime = new Date(year, monthNumber, date, selectedTime);
+    let appointmentDate = new Date(year, monthNumber, date);
+    let appointmentTime = selectedTime;
     // let isNewUser = !userList.includes(email);s
     let appointmentData = {
       email,
       name,
-      appointmentDateTime,
+      appointmentDate,
+      appointmentTime: `${appointmentTime}:00:00`,
       isNewUser,
       userId,
+      hospitalId,
     };
     console.log(appointmentData);
     let config = getHeaderConfigWithTokens();

@@ -32,7 +32,7 @@ let MaterialAutoComplete = (props) => {
           ? iVal
           : initialValues?.[input.name]
           ? initialValues[input.name]
-          : undefined
+          : ""
       }
       onInputChange={(event, newInput) => {
         setIVal(

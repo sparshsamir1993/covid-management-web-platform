@@ -11,6 +11,7 @@ import QuestionFormPage from "./views/admin/question/QuestionFormPage";
 import HospitalList from "./views/admin/hospital/HospitalList";
 import HospitalFormPage from "./views/admin/hospital/HospitalFormPage";
 import AppointmentFormPage from "./views/hospitalAdmin/appointments/AppointmentFormPage";
+import AppointmentListPage from "./views/hospitalAdmin/appointments/AppointmentListPage";
 
 const { BrowserRouter, Route, Switch } = require("react-router-dom");
 const { default: Header } = require("./Header");
@@ -40,6 +41,11 @@ const RouterSwitch = (props) => {
           exact
           path="/hospital/appointment/booking"
           component={AppointmentFormPage}
+        />
+        <Route
+          exact
+          path="/hospital/appointment/list"
+          component={AppointmentListPage}
         />
       </Switch>
     </div>
