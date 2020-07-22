@@ -1,0 +1,35 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+.app-background {
+  min-height: calc(100vh-64px);
+}
+.nav-link {
+  color: rgba(0, 0, 0, 0.87);
+  text-decoration: none;
+  display: inherit;
+}
+.container {
+  margin: 0 auto;
+  margin-top: 64px;
+}
+.makeStyles-drawer-6 {
+  width: 0;
+}
+.loader-container {
+  position: fixed;
+  height: 100vh;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-color: #f8f8f8ad;
+  z-index: 1000;
+}
+
+.loader {
+  left: 40%;
+  top: 30%;
+
+  position: absolute;
+}
