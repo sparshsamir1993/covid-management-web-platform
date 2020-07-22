@@ -30,7 +30,7 @@ const MaterialSelect = (props) => {
   } = props;
   return (
     <FormControl error={touched && error} className={classes.w100}>
-      <InputLabel htmlFor="role-native-simple">{input.name}</InputLabel>
+      <InputLabel htmlFor="role-native-simple">{label}</InputLabel>
       <Select
         native
         {...input}

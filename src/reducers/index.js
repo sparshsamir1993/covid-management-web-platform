@@ -9,6 +9,8 @@ import selectedOptionReducer from "./admin/selectedOptionReducer";
 import addressReducer from "./admin/addressReducer";
 import adminHospitalReducer from "./admin/hospitalReducer";
 import hAdminUserReducer from "./hospitalAdmin/userReducer";
+import hAdminHospitalReducer from "./hospitalAdmin/hospitalReducer";
+import hAdminAppointmentReducer from "./hospitalAdmin/appointmentReducer";
 var formReducer = require("redux-form").reducer;
 
 export default combineReducers({
@@ -23,4 +25,8 @@ export default combineReducers({
   selectedAddress: addressReducer,
   adminHospitalList: adminHospitalReducer,
   hospitalUserList: hAdminUserReducer,
+  hospitalAdmin: combineReducers({
+    myHospital: hAdminHospitalReducer,
+    appointmentList: hAdminAppointmentReducer,
+  }),
 });
