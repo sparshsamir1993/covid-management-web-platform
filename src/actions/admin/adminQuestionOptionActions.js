@@ -122,11 +122,9 @@ export const deleteQuestionOption = (option, history) => async (dispatch) => {
 };
 
 export const setSelectedOption = (values, history) => async (dispatch) => {
-  console.log(values);
   dispatch({ type: "SELECT_ANSWER_OPTION", payload: values });
 };
 
 export const deselectOption = (values, history) => async (dispatch) => {
-  console.log(values);
   dispatch({ type: "DESELECT_ANSWER_OPTION", payload: values });
 };

@@ -85,7 +85,6 @@ export const deleteHospital = (id, history) => async (dispatch) => {
     let config = getHeaderConfigWithTokens();
     if (config) {
       const result = await axios.delete(`${BASE_URL}/${id}`, config);
-      console.log(result);
       if (result.status === 200) {
         dispatch({ type: "HOSPITAL_LIST_AFTER_DELETE", payload: id });
       } else {

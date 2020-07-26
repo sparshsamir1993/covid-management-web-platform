@@ -10,7 +10,6 @@ const BASE_URL = `${API_BASE_URL}/admin/user`;
 export const getUserList = (history) => async (dispatch) => {
   try {
     let config = getHeaderConfigWithTokens();
-    console.log(config);
     if (config) {
       const users = await axios.get(`${BASE_URL}`, config);
       let tokens = checkResponseAuthHeaders(users.headers);
@@ -33,11 +32,9 @@ export const getUserList = (history) => async (dispatch) => {
 
 export const updateUserRole = (values, history) => async (dispatch) => {
   try {
-    console.log(values);
     let config = getHeaderConfigWithTokens();
     if (config) {
       const user = await axios.patch(`${BASE_URL}/updateRole`, values, config);
-      console.log(user.headers);
       let tokens = checkResponseAuthHeaders(user.headers);
       if (user.data && user.data.length > 0) {
         if (user.data[0] > 0) {

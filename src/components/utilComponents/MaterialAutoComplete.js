@@ -17,7 +17,6 @@ let MaterialAutoComplete = (props) => {
   } = props;
 
   let [iVal, setIVal] = useState("");
-  // console.log(input.name, initialValues[input.name], iVal);
   return (
     <Autocomplete
       id="material-autoselect"

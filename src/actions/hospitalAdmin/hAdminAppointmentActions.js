@@ -5,7 +5,10 @@ import {
   checkResponseAuthHeaders,
 } from "../../utils";
 import { showAlert } from "../alertActions";
-import { FETCH_HADMIN_APPOINTMENT_LIST } from "../../constants/reducerConstants";
+import {
+  FETCH_HADMIN_APPOINTMENT_LIST,
+  FETCH_HADMIN_APPOINTMENT_LIST_AFTER_CREATE,
+} from "../../constants/reducerConstants";
 const BASE_URL = `${API_BASE_URL}/hospital/appointment`;
 const getMonthFromString = (mon) => {
   let d = Date.parse(mon + "1, 2012");
@@ -81,7 +84,7 @@ export const bookUserAppointment = (values, history) => async (dispatch) => {
         history.replace("/");
       }
       dispatch({
-        type: FETCH_HADMIN_APPOINTMENT_LIST,
+        type: FETCH_HADMIN_APPOINTMENT_LIST_AFTER_CREATE,
         payload: appointment.data,
       });
     } else {

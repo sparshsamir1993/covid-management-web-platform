@@ -72,6 +72,7 @@ let AppointmentForm = (props) => {
     let selectedDateAppointments = [];
     let bookedApTimes = [];
     if (props.formValues?.values?.selectedDate) {
+      console.log(props);
       selectedDateAppointments = props.appointmentList.filter((appointment) => {
         let selectedDate = props.formValues?.values?.selectedDate;
         if (selectedDate) {
