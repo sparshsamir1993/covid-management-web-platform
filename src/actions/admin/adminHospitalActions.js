@@ -11,7 +11,6 @@ export const getHospitalList = (history) => async (dispatch) => {
   try {
     let config = getHeaderConfigWithTokens();
     if (config) {
-      console.log(config);
       const hospitals = await axios.get(`${BASE_URL}`, config);
       let tokens = checkResponseAuthHeaders(hospitals.headers);
       if (!tokens) {
@@ -32,11 +31,9 @@ export const getHospitalList = (history) => async (dispatch) => {
 };
 
 export const createNewHospital = (data, history) => async (dispatch) => {
-  console.log(data);
   try {
     let config = getHeaderConfigWithTokens();
     if (config) {
-      console.log(config);
       const hospital = await axios.post(`${BASE_URL}`, data, config);
       let tokens = checkResponseAuthHeaders(hospital.headers);
       if (!tokens) {

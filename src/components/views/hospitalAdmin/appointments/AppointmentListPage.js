@@ -73,7 +73,6 @@ let AppointmentListPage = (props) => {
     if (appointmentListState?.length) {
       return appointmentListDayWise.map((appointment) => {
         let { appointmentDate, matchedAppointments } = appointment;
-        console.log(matchedAppointments);
         return (
           <React.Fragment key={appointmentDate}>
             <ListItem>
@@ -93,7 +92,6 @@ let AppointmentListPage = (props) => {
                   icon: tableIcons.Edit,
                   tooltip: "Edit Hospital",
                   onClick: (event, rowData) => {
-                    console.log(rowData);
                     history.push("/admin/hospitals/edit", rowData);
                   },
                 },
@@ -101,8 +99,6 @@ let AppointmentListPage = (props) => {
                   icon: tableIcons.Delete,
                   tooltip: "Delete Hospital",
                   onClick: async (event, rowData) => {
-                    console.log(rowData);
-                    console.log(props);
                     props.showLoading();
                     await props.deleteHospital(rowData.id);
                     props.hideLoading();

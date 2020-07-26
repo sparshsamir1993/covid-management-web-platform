@@ -28,7 +28,6 @@ let QuestionFormPage = (props) => {
     };
     props.updateQuestionSubmit(data, props.history);
   };
-  console.log(props.location?.state);
   const question = props.location?.state;
   return (
     <Container maxWidth="lg">

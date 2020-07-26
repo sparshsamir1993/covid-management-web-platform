@@ -13,7 +13,6 @@ export const getQuestionOptionList = (questionId, history) => async (
   try {
     let config = getHeaderConfigWithTokens();
     if (config) {
-      console.log(config);
       const options = await axios.get(`${BASE_URL}/${questionId}`, config);
       let tokens = checkResponseAuthHeaders(options.headers);
       if (!tokens) {
@@ -32,14 +31,12 @@ export const createQuestionOption = (values, history) => async (dispatch) => {
   try {
     let config = getHeaderConfigWithTokens();
     if (config) {
-      console.log(values);
       const question = await axios.post(`${BASE_URL}`, values, config);
       let tokens = checkResponseAuthHeaders(question.headers);
       if (!tokens) {
         dispatch(showAlert({ type: "error", content: "Error with tokens" }));
         history.replace("/");
       }
-      console.log(question);
       if (question.status == 200 && question.data.id) {
         dispatch({
           type: "QUESTION_OPTION_LIST_AFTER_CREATE",
@@ -75,7 +72,6 @@ export const updateOption = (values, history) => async (dispatch) => {
         dispatch(showAlert({ type: "error", content: "Error with tokens" }));
       } else {
         if (option.status == 200) {
-          console.log(option);
           dispatch({
             type: "QUESTION_OPTIONS_LIST_AFTER_UPDATE",
             payload: values,

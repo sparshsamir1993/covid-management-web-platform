@@ -20,7 +20,6 @@ const useStyles = makeStyles(() => ({
 const HospitalFormPage = (props) => {
   const history = useHistory();
   const hospital = props.location?.state;
-  console.log(hospital);
   const classes = useStyles();
   const newHospitalSubmit = async (vals) => {
     const { name, contact, detailedAddress, lat, lng } = vals;
@@ -33,7 +32,6 @@ const HospitalFormPage = (props) => {
     props.hideLoading();
   };
   const updateHospitalSubmit = (vals) => {
-    console.log(vals);
     const { name, contact, detailedAddress, lat, lng, id } = vals;
     props.updateHospitalSubmit(
       { name, contact, detailedAddress, lat, lng, id },

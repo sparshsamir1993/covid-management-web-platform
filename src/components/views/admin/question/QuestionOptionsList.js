@@ -74,8 +74,6 @@ let QuestionOptionList = (props) => {
     const updateQuestionOptionsList = async () => {
       props.showLoading();
       if (props.options?.length >= 0) {
-        console.log(props.options);
-        // props.setQuestionOptionList(props.optionList);
         if (props.options.length >= 0) {
           changeAdminQuestionOptionList([...props.options]);
         }
@@ -94,7 +92,6 @@ let QuestionOptionList = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  console.log(state);
   return {
     options: state.adminQuestionOptionList,
   };

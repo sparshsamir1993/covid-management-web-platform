@@ -31,7 +31,6 @@ const QuestionList = (props) => {
   }
   useEffect(() => {
     if (props.questions?.length > 0) {
-      console.log(props.questions);
       changeAdminQuestionList([...props.questions]);
     }
   }, [props.questions]);
@@ -69,7 +68,6 @@ const QuestionList = (props) => {
               icon: tableIcons.Edit,
               tooltip: "Edit Question",
               onClick: (event, rowData) => {
-                console.log(rowData);
                 history.push("/admin/questions/edit", rowData);
               },
             },
@@ -77,8 +75,6 @@ const QuestionList = (props) => {
               icon: tableIcons.Delete,
               tooltip: "Delete Question",
               onClick: async (event, rowData) => {
-                console.log(rowData);
-                console.log(props);
                 props.showLoading();
                 await props.deleteQuestion(rowData.id);
                 props.hideLoading();

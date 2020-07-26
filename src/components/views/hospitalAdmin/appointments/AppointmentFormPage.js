@@ -6,8 +6,6 @@ import { bookUserAppointment } from "../../../../actions/hospitalAdmin/hAdminApp
 
 let AppointmentFormPage = (props) => {
   const createNewAppointment = async () => {
-    console.log(props.formValues.values);
-
     await props.bookUserAppointment({
       ...props.formValues.values,
       hospitalId: props.adminHospital.id,
@@ -21,7 +19,6 @@ let AppointmentFormPage = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  console.log(state);
   return {
     formValues: state.form.hAdminAppointmentForm,
     adminHospital: state.hospitalAdmin.myHospital,

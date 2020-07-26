@@ -35,7 +35,6 @@ export const generateAppointmentHours = () => {
 };
 
 export const getFormattedDateForAppointment = (date) => {
-  console.log(date);
   date = new Date(date);
   return new Intl.DateTimeFormat("en", {
     year: "numeric",

@@ -31,7 +31,6 @@ const HospitalList = (props) => {
 
   useEffect(() => {
     if (props.hospitals?.length > 0) {
-      console.log(props.hospitals);
       changeAdminHospitalList([...props.hospitals]);
     }
   }, [props.hospitals]);
@@ -69,7 +68,6 @@ const HospitalList = (props) => {
               icon: tableIcons.Edit,
               tooltip: "Edit Hospital",
               onClick: (event, rowData) => {
-                console.log(rowData);
                 history.push("/admin/hospitals/edit", rowData);
               },
             },
@@ -77,8 +75,6 @@ const HospitalList = (props) => {
               icon: tableIcons.Delete,
               tooltip: "Delete Hospital",
               onClick: async (event, rowData) => {
-                console.log(rowData);
-                console.log(props);
                 props.showLoading();
                 await props.deleteHospital(rowData.id);
                 props.hideLoading();

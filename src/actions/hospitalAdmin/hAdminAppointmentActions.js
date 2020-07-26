@@ -19,8 +19,6 @@ export const getHospitalAppointments = (hospitalId, history) => async (
   dispatch
 ) => {
   try {
-    console.log(hospitalId);
-
     let config = getHeaderConfigWithTokens();
     if (config) {
       let appointmentList = await axios.get(
@@ -55,7 +53,6 @@ export const bookUserAppointment = (values, history) => async (dispatch) => {
       userId,
       hospitalId,
     } = values;
-    console.log(selectedDate, selectedTime);
     let year = new Date().getFullYear();
     let date = selectedDate.split("-")[0];
     let monthNumber = selectedDate.split("-")[1];
@@ -71,7 +68,6 @@ export const bookUserAppointment = (values, history) => async (dispatch) => {
       userId,
       hospitalId,
     };
-    console.log(appointmentData);
     let config = getHeaderConfigWithTokens();
     if (config) {
       const appointment = await axios.post(

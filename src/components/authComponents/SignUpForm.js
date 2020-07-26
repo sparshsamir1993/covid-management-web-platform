@@ -13,10 +13,7 @@ const LinkBehavior = React.forwardRef((props, ref) => (
 let SignUpForm = (props) => {
   let history = useHistory();
   const submitSignup = async (values, dispatch) => {
-    console.log(values);
-
     let { email, password, confirmPassword } = values;
-
     if (!email || !password || !confirmPassword) {
       throw new SubmissionError({
         _error:

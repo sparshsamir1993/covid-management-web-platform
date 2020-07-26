@@ -35,7 +35,6 @@ const validate = (values, props) => {
   if (!values["role"] && !props.location.state.role) {
     errors["role"] = "Required";
   }
-  console.log(values);
   return errors;
 };
 const setHospitalDetails = (hospital) => (dispatch) => {
@@ -50,7 +49,6 @@ let UserEdit = (props) => {
     history.goBack();
   }
   const changeUserRole = async (values, dispatch) => {
-    console.log(values);
     let data = {
       role: values.role ? values.role : props.location?.state?.role,
       id: props.location.state.id,
@@ -60,10 +58,6 @@ let UserEdit = (props) => {
     await props.updateUserRole(data, props.history);
     props.hideLoading();
   };
-
-  useEffect(() => {
-    console.log(props.hospitalList);
-  }, [props.hospitalList]);
 
   useLayoutEffect(() => {
     const getHospitalListFromAPI = async () => {
@@ -77,7 +71,6 @@ let UserEdit = (props) => {
     )[0];
 
     props.setHospitalDetails(hospital);
-    // console.log(hospitalName);
   };
   const { handleSubmit, pristine, reset, submitting, hospitalList } = props;
   return (

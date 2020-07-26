@@ -22,7 +22,6 @@ const UserList = (props) => {
   }
   useEffect(() => {
     if (props.adminUserList.length > 1) {
-      console.log(props.adminUserList.length);
       changeAdminUserList([...props.adminUserList]);
     }
     if (props.auth.id && props.auth.role !== ADMIN_ROLE) {
@@ -64,7 +63,6 @@ const UserList = (props) => {
             icon: () => <Edit />,
             tooltip: "Edit User",
             onClick: (event, rowData) => {
-              console.log(rowData);
               history.push("/admin/users/edit", rowData);
             },
           },

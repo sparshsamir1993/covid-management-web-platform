@@ -20,7 +20,6 @@ const changeFormEmail = (newValue, props) => (dispatch) => {
 
   dispatch(change("hAdminAppointmentForm", "email", newValue));
   dispatch(change("hAdminAppointmentForm", "isNewUser", isNewUser));
-  console.log(user);
   if (!isNewUser && user.id) {
     dispatch(change("hAdminAppointmentForm", "name", user.name));
     dispatch(change("hAdminAppointmentForm", "userId", user.id));
@@ -30,10 +29,6 @@ const changeFormEmail = (newValue, props) => (dispatch) => {
 };
 let AppointmentForm = (props) => {
   const { handleSubmit, onAppointmentSubmit, pristine, submitting } = props;
-
-  useEffect(() => {
-    console.log(props.userList);
-  }, [props.userList]);
 
   useLayoutEffect(() => {
     // for getting user list
@@ -84,7 +79,6 @@ let AppointmentForm = (props) => {
           let date = selectedDate.split("-")[0];
           let monthNumber = selectedDate.split("-")[1];
           let appointmentDate = new Date(year, monthNumber, date);
-          console.log(appointment.appointmentDate, appointmentDate);
           if (
             new Date(appointment.appointmentDate).getDate() ==
             new Date(appointmentDate).getDate()
@@ -96,7 +90,6 @@ let AppointmentForm = (props) => {
       bookedApTimes = selectedDateAppointments.map(
         (appointment) => appointment.appointmentTime.split(":")?.[0]
       );
-      console.log(slots, bookedApTimes, selectedDateAppointments);
     }
     const unBookedSlots = slots.map((slot) => {
       if (slot && bookedApTimes.includes(slot.hourValue + "")) {
@@ -104,7 +97,6 @@ let AppointmentForm = (props) => {
       }
       return slot;
     });
-    console.log(unBookedSlots);
     return unBookedSlots.map((slot) => {
       if (slot) {
         return (
@@ -175,7 +167,6 @@ let AppointmentForm = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  // console.log(state.hospitalUserList);
   return {
     userList: state.hospitalUserList,
     initialValues: { isNewUser: false },

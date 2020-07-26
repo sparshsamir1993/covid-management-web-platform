@@ -15,7 +15,6 @@ let QuestionOptionForm = (props) => {
   const [isOptionCorrect, setIsOptionCorrect] = useState(false);
   useEffect(() => {
     if (props.initialValues) {
-      console.log(props.initialValues.optionContent);
       setInitialContent(props.initialValues.optionContent);
     }
   }, [props.initialValues.optionContent]);
@@ -36,7 +35,6 @@ let QuestionOptionForm = (props) => {
       });
       props.deselectOption();
     } else {
-      // console.log(props.formValues);
       props.createQuestionOption({
         questionId: props.questionId,
         optionContent: props.formValues.values.optionContent,
@@ -53,7 +51,6 @@ let QuestionOptionForm = (props) => {
     initialValues,
     input,
   } = props;
-  console.log(initialValues);
   return (
     <form onSubmit={handleSubmit(() => addQuestionOption())}>
       <Field
@@ -101,10 +98,6 @@ let QuestionOptionForm = (props) => {
 const mapStateToProps = (state) => {
   let isCorrectOption;
   if (state.selectedOption.id) {
-    console.log(
-      state.selectedOption.id,
-      state.selectedOption?.question?.correctOptionId
-    );
     isCorrectOption =
       state.selectedOption?.id ==
       state.selectedOption?.question?.correctOptionId;

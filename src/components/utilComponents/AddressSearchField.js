@@ -8,7 +8,6 @@ import PlacesAutocomplete, {
 class AddressSearchField extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
       address: "",
       currentAddress: this.props.initialValue ? this.props.initialValue : "",
@@ -21,9 +20,6 @@ class AddressSearchField extends React.Component {
       this.props.onAddressSelect({});
     }
   };
-  componentDidMount() {
-    console.log(this.props);
-  }
   handleSelect = async (address) => {
     this.setState({ address });
     const { input } = this.props;
@@ -70,7 +66,6 @@ class AddressSearchField extends React.Component {
             <div className="autocomplete-dropdown-container">
               {loading && <div>Loading...</div>}
               {suggestions.map((suggestion) => {
-                // console.log(suggestion);
                 const className = suggestion.active
                   ? "suggestion-item--active"
                   : "suggestion-item";
