@@ -34,12 +34,14 @@ let AppointmentListPage = (props) => {
     let newApData = [];
     uniqueApDates.map((date) => {
       let dataToAdd = {};
-      const matchedAps = props.appointmentList.filter(
-        (appointment) => appointment.appointmentDate === date
-      );
-      dataToAdd.appointmentDate = date;
-      dataToAdd.matchedAppointments = matchedAps;
-      newApData.push(dataToAdd);
+      if (props.appointmentList && props.appointmentList.length) {
+        const matchedAps = props.appointmentList.filter(
+          (appointment) => appointment.appointmentDate === date
+        );
+        dataToAdd.appointmentDate = date;
+        dataToAdd.matchedAppointments = matchedAps;
+        newApData.push(dataToAdd);
+      }
     });
     changeAppintmentListDayWise(newApData);
   }, [props.appointmentList]);
@@ -90,14 +92,14 @@ let AppointmentListPage = (props) => {
               actions={[
                 {
                   icon: tableIcons.Edit,
-                  tooltip: "Edit Hospital",
+                  tooltip: "Edit Appointment",
                   onClick: (event, rowData) => {
-                    history.push("/admin/hospitals/edit", rowData);
+                    history.push("/hospital/appointment/detail", rowData);
                   },
                 },
                 {
                   icon: tableIcons.Delete,
-                  tooltip: "Delete Hospital",
+                  tooltip: "Delete Appointment",
                   onClick: async (event, rowData) => {
                     props.showLoading();
                     await props.deleteHospital(rowData.id);

@@ -8,6 +8,8 @@ import { showAlert } from "../alertActions";
 import {
   FETCH_HADMIN_APPOINTMENT_LIST,
   FETCH_HADMIN_APPOINTMENT_LIST_AFTER_CREATE,
+  FETCH_HADMIN_APPOINTMENT_DETAIL_AFTER_UPDATE,
+  FETCH_HADMIN_APPOINTMENT_DETAIL,
 } from "../../constants/reducerConstants";
 const BASE_URL = `${API_BASE_URL}/hospital/appointment`;
 const getMonthFromString = (mon) => {
@@ -97,4 +99,36 @@ export const bookUserAppointment = (values, history) => async (dispatch) => {
       }
     }
   }
+};
+
+export const updateAppointmentStatus = (values, history) => async (
+  dispatch
+) => {
+  console.log(values);
+  let config = getHeaderConfigWithTokens();
+  if (config) {
+    const hasAppointmentUpdated = await axios.put(
+      `${BASE_URL}/updateAppointmentStatus`,
+      values,
+      config
+    );
+    let tokens = checkResponseAuthHeaders(hasAppointmentUpdated.headers);
+    if (!tokens) {
+      dispatch(showAlert({ type: "error", content: "Error with tokens" }));
+      history.replace("/");
+    }
+    dispatch({
+      type: FETCH_HADMIN_APPOINTMENT_DETAIL_AFTER_UPDATE,
+      payload: values,
+    });
+  } else {
+    history.replace("/");
+  }
+};
+
+export const setAppointmentData = (values, history) => async (dispatch) => {
+  dispatch({
+    type: FETCH_HADMIN_APPOINTMENT_DETAIL,
+    payload: values,
+  });
 };
