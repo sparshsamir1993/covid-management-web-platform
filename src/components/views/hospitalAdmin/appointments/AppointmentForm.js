@@ -12,6 +12,7 @@ import { Button, MenuItem } from "@material-ui/core";
 import {
   generateAppointmentDates,
   generateAppointmentHours,
+  removeLastCharFromTime,
 } from "../../../../utils";
 import _ from "lodash";
 const changeFormEmail = (newValue, props) => (dispatch) => {
@@ -71,6 +72,7 @@ let AppointmentForm = (props) => {
     const slots = generateAppointmentHours();
     let selectedDateAppointments = [];
     let bookedApTimes = [];
+    console.log(props.formValues?.values);
     if (props.formValues?.values?.selectedDate) {
       console.log(props);
       selectedDateAppointments = props.appointmentList.filter((appointment) => {
@@ -80,9 +82,11 @@ let AppointmentForm = (props) => {
           let date = selectedDate.split("-")[0];
           let monthNumber = selectedDate.split("-")[1];
           let appointmentDate = new Date(year, monthNumber, date);
+          // debugger;
           if (
-            new Date(appointment.appointmentDate).getDate() ==
-            new Date(appointmentDate).getDate()
+            new Date(
+              removeLastCharFromTime(appointment.appointmentDate)
+            ).getDate() == new Date(appointmentDate).getDate()
           ) {
             return true;
           }

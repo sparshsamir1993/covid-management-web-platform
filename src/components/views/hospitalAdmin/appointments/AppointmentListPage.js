@@ -13,7 +13,12 @@ import { getFormattedDateForAppointment } from "../../../../utils";
 import MaterialTable from "material-table";
 import tableIcons from "../../../tableIcons";
 import { useHistory } from "react-router-dom";
-import { tConvert } from "../../../../utils/appointmentUtils";
+import {
+  tConvert,
+  removeLastCharFromTime,
+} from "../../../../utils/appointmentUtils";
+import { Field, reduxForm } from "redux-form";
+import MaterialSelect from "../../../utilComponents/MaterialSelect";
 
 const useStyles = makeStyles(() => ({
   appointmentList: {
@@ -25,26 +30,44 @@ let AppointmentListPage = (props) => {
   const history = useHistory();
   const [appointmentListState, changeAppointmentListState] = useState([]);
   const [appointmentListDayWise, changeAppintmentListDayWise] = useState([]);
+  const [
+    appointmentListDayWiseStatic,
+    changeAppintmentListDayWiseStatic,
+  ] = useState([]);
+  const [uniqueAppointmentDates, changeUniqueAppointmentDates] = useState([]);
 
   useEffect(() => {
+    console.log(props);
     changeAppointmentListState(props.appointmentList);
 
-    const apDates = _.map(props.appointmentList, "appointmentDate");
+    // const apDates = _.map(props.appointmentList, "appointmentDate");
+    const apDates = props.appointmentList.map((ap) =>
+      removeLastCharFromTime(ap.appointmentDate)
+    );
+    console.log(apDates);
     const uniqueApDates = _.uniq(apDates);
+    changeUniqueAppointmentDates(uniqueApDates);
     let newApData = [];
     uniqueApDates.map((date) => {
       let dataToAdd = {};
       if (props.appointmentList && props.appointmentList.length) {
+        // debugger;
         const matchedAps = props.appointmentList.filter(
-          (appointment) => appointment.appointmentDate === date
+          (appointment) =>
+            new Date(
+              removeLastCharFromTime(appointment.appointmentDate)
+            ).getTime() === new Date(date).getTime()
         );
         dataToAdd.appointmentDate = date;
         dataToAdd.matchedAppointments = matchedAps;
         newApData.push(dataToAdd);
       }
     });
+    console.log(newApData);
     changeAppintmentListDayWise(newApData);
+    changeAppintmentListDayWiseStatic(newApData);
   }, [props.appointmentList]);
+
   const classes = useStyles();
   useLayoutEffect(() => {
     const getHospitalListFromAPI = async () => {
@@ -54,6 +77,7 @@ let AppointmentListPage = (props) => {
       getHospitalListFromAPI();
     }
   }, [props.myHospital]);
+
   const tableColumns = [
     { title: "Id", field: "id" },
     { title: "User email", field: "user.email" },
@@ -115,11 +139,42 @@ let AppointmentListPage = (props) => {
     }
   };
 
+  const renderAvailableAppointmentDatesSelect = () => {
+    return uniqueAppointmentDates.map((date) => (
+      <option key={date}>{getFormattedDateForAppointment(date)}</option>
+    ));
+  };
+
+  const showSelectedDateAppointments = (e) => {
+    console.log(e.currentTarget.value);
+
+    console.log(appointmentListDayWise);
+    let sTime = new Date(e.currentTarget.value).getTime();
+    debugger;
+    if (!sTime || sTime == NaN) {
+      changeAppintmentListDayWise(appointmentListDayWiseStatic);
+      return;
+    }
+    let newArr = appointmentListDayWiseStatic.filter(
+      (ap) => new Date(ap.appointmentDate).getTime() == sTime
+    );
+    changeAppintmentListDayWise(newArr);
+  };
+
   return (
     <Container maxWidth="lg">
+      <Field
+        type="text"
+        name="dateToBeDisplayed"
+        onChange={showSelectedDateAppointments}
+        component={MaterialSelect}
+      >
+        <option key={""}>All Dates</option>
+
+        {renderAvailableAppointmentDatesSelect()}
+      </Field>
       <List className={classes.appointmentList}>
         {renderAppointmentList()}
-        <ListItem>20 july</ListItem>
         <Divider />
       </List>
     </Container>
@@ -130,10 +185,14 @@ const mapStateToProps = (state) => {
   return {
     appointmentList: state.hospitalAdmin.appointmentList,
     myHospital: state.hospitalAdmin.myHospital,
+    formValues: state.form.currentAppointmentDateForm,
   };
 };
 
 AppointmentListPage = connect(mapStateToProps, { getHospitalAppointments })(
   AppointmentListPage
 );
+AppointmentListPage = reduxForm({
+  form: "currentAppointmentDateForm",
+})(AppointmentListPage);
 export default AppointmentListPage;
