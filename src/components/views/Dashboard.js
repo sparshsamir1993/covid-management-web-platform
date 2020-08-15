@@ -12,12 +12,7 @@ class Dashboard extends Component {
     super(props);
   }
   render() {
-    return (
-      <div>
-        <h1>this is a dash of board</h1>
-        <Button onClick={this.props.logoutUser}>hi</Button>
-      </div>
-    );
+    return <div></div>;
   }
 }
 

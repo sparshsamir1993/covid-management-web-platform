@@ -8,6 +8,8 @@ import {
   Divider,
   Container,
   makeStyles,
+  Button,
+  Grid,
 } from "@material-ui/core";
 import { getFormattedDateForAppointment } from "../../../../utils";
 import MaterialTable from "material-table";
@@ -19,10 +21,20 @@ import {
 } from "../../../../utils/appointmentUtils";
 import { Field, reduxForm } from "redux-form";
 import MaterialSelect from "../../../utilComponents/MaterialSelect";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
+import { mainStyles } from "../../../../styles/styles";
 
 const useStyles = makeStyles(() => ({
   appointmentList: {
     marginTop: "80px",
+  },
+  appoinemtDateSelect: {
+    // width: "50px",
+    marginTop: "12px",
   },
 }));
 
@@ -30,6 +42,11 @@ let AppointmentListPage = (props) => {
   const history = useHistory();
   const [appointmentListState, changeAppointmentListState] = useState([]);
   const [appointmentListDayWise, changeAppintmentListDayWise] = useState([]);
+  const [datePickerOpen, changeDatePickerOpen] = useState(false);
+  const [
+    appointmentDateSelectedToView,
+    changeAppointmentDateSelectedToView,
+  ] = useState(null);
   const [
     appointmentListDayWiseStatic,
     changeAppintmentListDayWiseStatic,
@@ -146,33 +163,62 @@ let AppointmentListPage = (props) => {
   };
 
   const showSelectedDateAppointments = (e) => {
-    console.log(e.currentTarget.value);
-
+    console.log(e);
+    changeAppointmentDateSelectedToView(e);
     console.log(appointmentListDayWise);
-    let sTime = new Date(e.currentTarget.value).getTime();
-    debugger;
+    let sTime = new Date(e).setHours(0, 0, 0, 0);
+    // debugger;
     if (!sTime || sTime == NaN) {
       changeAppintmentListDayWise(appointmentListDayWiseStatic);
       return;
     }
+    // debugger;
     let newArr = appointmentListDayWiseStatic.filter(
       (ap) => new Date(ap.appointmentDate).getTime() == sTime
     );
     changeAppintmentListDayWise(newArr);
   };
-
+  let uniqueApDatesString = uniqueAppointmentDates.map((date) =>
+    new Date(date).getTime()
+  );
   return (
     <Container maxWidth="lg">
-      <Field
-        type="text"
-        name="dateToBeDisplayed"
-        onChange={showSelectedDateAppointments}
-        component={MaterialSelect}
-      >
-        <option key={""}>All Dates</option>
+      <Grid container spacing={3}>
+        <Grid item xs={3}>
+          <div className={classes.appoinemtDateSelect}>
+            <Field
+              type="text"
+              name="dateToBeDisplayed"
+              onChange={showSelectedDateAppointments}
+              component={MaterialSelect}
+            >
+              <option key={""}>All Dates</option>
 
-        {renderAvailableAppointmentDatesSelect()}
-      </Field>
+              {renderAvailableAppointmentDatesSelect()}
+            </Field>
+          </div>
+        </Grid>
+        <Grid item xs={3}></Grid>
+        <Grid item xs={6}>
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <KeyboardDatePicker
+              disableToolbar
+              variant="oulined"
+              format="MM/dd/yyyy"
+              margin="normal"
+              id="date-picker-inline"
+              label="Select Date"
+              todayLabel="All Dates"
+              value={appointmentDateSelectedToView}
+              onChange={showSelectedDateAppointments}
+              shouldDisableDate={(date) => {
+                return !uniqueApDatesString.includes(new Date(date).getTime());
+              }}
+            />
+          </MuiPickersUtilsProvider>
+        </Grid>
+      </Grid>
+
       <List className={classes.appointmentList}>
         {renderAppointmentList()}
         <Divider />
