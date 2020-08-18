@@ -24,6 +24,7 @@ import {
 } from "../../../../actions";
 import { connect } from "react-redux";
 import MaterialAutoSelect from "../../../utilComponents/MaterialAutoComplete";
+import { mainStyles } from "../../../../styles/styles";
 
 const useStyles = makeStyles(() => ({
   itemStyle: {
@@ -42,6 +43,7 @@ const setHospitalDetails = (hospital) => (dispatch) => {
 };
 
 let UserEdit = (props) => {
+  const appStyles = mainStyles();
   const history = useHistory();
   const classes = useStyles();
   const [isHAdmin, setURole] = React.useState(false);
@@ -75,7 +77,7 @@ let UserEdit = (props) => {
   const { handleSubmit, pristine, reset, submitting, hospitalList } = props;
   return (
     <Container maxWidth="lg">
-      <form onSubmit={handleSubmit(changeUserRole)}>
+      <form onSubmit={handleSubmit(changeUserRole)} className={appStyles.mt100}>
         <Grid container spacing={4}>
           <Grid item xs={6} className={classes.itemStyle}>
             <Typography variant="h5">Email</Typography>
@@ -85,7 +87,7 @@ let UserEdit = (props) => {
           </Grid>
         </Grid>
         <Divider />
-        <Grid container spacing={4}>
+        <Grid className={appStyles.mt25} container spacing={4}>
           <Grid item xs={6} className={classes.itemStyle}>
             <Typography variant="h5">Name</Typography>
           </Grid>
@@ -98,11 +100,11 @@ let UserEdit = (props) => {
           </Grid>
         </Grid>
         <Divider />
-        <Grid container spacing={4}>
+        <Grid container className={appStyles.mt25} spacing={4}>
           <Grid item xs={6} className={classes.itemStyle}>
             <Typography variant="h5">Role</Typography>
           </Grid>
-          <Grid item xs={3} className={classes.itemStyle}>
+          <Grid item xs={6} className={classes.itemStyle}>
             <Field
               name="role"
               component={RoleSelect}
@@ -116,8 +118,11 @@ let UserEdit = (props) => {
               <option value={HOSPITAL_ADMIN_ROLE}>{HOSPITAL_ADMIN_ROLE}</option>
             </Field>
           </Grid>
-          {props.selectedRole === HOSPITAL_ADMIN_ROLE && (
-            <Grid container spacing={4}>
+        </Grid>
+        {props.selectedRole === HOSPITAL_ADMIN_ROLE && (
+          <React.Fragment>
+            <Divider />
+            <Grid container className={appStyles.mt25} spacing={4}>
               <Grid item xs={6} className={classes.itemStyle}>
                 <Typography variant="h5">Name</Typography>
               </Grid>
@@ -126,6 +131,7 @@ let UserEdit = (props) => {
                   name="hospitalName"
                   component={MaterialAutoSelect}
                   allowNewInput={false}
+                  className={appStyles.marginCenter}
                   autoCompleteOptions={hospitalList}
                   labelname="name"
                   {...{
@@ -138,7 +144,9 @@ let UserEdit = (props) => {
                 />
               </Grid>
             </Grid>
-          )}
+          </React.Fragment>
+        )}
+        <Grid container>
           <Grid item xs={3} className={classes.itemStyle}>
             <IconButton
               aria-label="Save"

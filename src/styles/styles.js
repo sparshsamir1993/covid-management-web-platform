@@ -1,10 +1,6 @@
 const { makeStyles } = require("@material-ui/core");
 
 export const mainStyles = makeStyles(() => ({
-  appointmentDetailCard: {
-    padding: "10px",
-    marginTop: "150px",
-  },
   primaryButton: {
     background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
     border: 0,
@@ -14,5 +10,19 @@ export const mainStyles = makeStyles(() => ({
     height: 48,
     padding: "0 30px",
     marginTop: "20px",
+  },
+
+  ///////////////////////////// global margins //////////////////////////
+  marginCenter: {
+    margin: "0 auto",
+  },
+  mt10: {
+    marginTop: "10px",
+  },
+  mt25: {
+    marginTop: "25px",
+  },
+  mt100: {
+    marginTop: "100px",
   },
 }));

@@ -28,6 +28,7 @@ import ErrorAlert from "./alertComponent/CommonAlert";
 import { ADMIN_ROLE, HOSPITAL_ADMIN_ROLE } from "../constants";
 import { showLoading, hideLoading, getUser } from "../actions";
 import { checkAndUpdateTokens } from "../utils";
+import { mainStyles } from "../styles/styles";
 
 const drawerWidth = 240;
 
@@ -94,6 +95,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Header = (props) => {
   const classes = useStyles();
+  const appStyle = mainStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -119,7 +121,7 @@ const Header = (props) => {
     if (props.auth.role === ADMIN_ROLE) {
       return (
         <React.Fragment>
-          <Typography variant="h6" align="center">
+          <Typography variant="h6" align="center" className={appStyle.mt10}>
             Admin Links
           </Typography>
           <List>
@@ -154,7 +156,7 @@ const Header = (props) => {
     } else if (props.auth.role === HOSPITAL_ADMIN_ROLE) {
       return (
         <React.Fragment>
-          <Typography variant="h6" align="center">
+          <Typography variant="h6" align="center" className={appStyle.mt10}>
             Hospital Admin Links
           </Typography>
           <List>
@@ -203,14 +205,14 @@ const Header = (props) => {
     return (
       <React.Fragment>
         <List>
-          <ListItem button key={"Home"} onClick={handleDrawerClose}>
+          {/* <ListItem button key={"Home"} onClick={handleDrawerClose}>
             <Link to="/" className="nav-link">
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
               <ListItemText primary={"Home"} />
             </Link>
-          </ListItem>
+          </ListItem> */}
           <ListItem button key={"Dashboard"} onClick={handleDrawerClose}>
             <Link to="/" className="nav-link">
               <ListItemIcon>

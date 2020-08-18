@@ -14,7 +14,10 @@ import { Edit } from "@material-ui/icons";
 import MaterialTable from "material-table";
 
 import tableIcons from "../../../tableIcons";
+
+import { mainStyles } from "../../../../styles/styles";
 const UserList = (props) => {
+  const appStyles = mainStyles();
   const history = useHistory();
   const [adminUserList, changeAdminUserList] = useState([]);
   if (!props.auth.id) {
@@ -50,24 +53,26 @@ const UserList = (props) => {
 
   return (
     <Container maxWidth="lg">
-      <MaterialTable
-        icons={tableIcons}
-        title="Users List"
-        columns={tableColumns}
-        data={adminUserList}
-        options={{
-          filtering: true,
-        }}
-        actions={[
-          {
-            icon: () => <Edit />,
-            tooltip: "Edit User",
-            onClick: (event, rowData) => {
-              history.push("/admin/users/edit", rowData);
+      <div className={appStyles.mt100}>
+        <MaterialTable
+          icons={tableIcons}
+          title="Users List"
+          columns={tableColumns}
+          data={adminUserList}
+          options={{
+            filtering: true,
+          }}
+          actions={[
+            {
+              icon: () => <Edit />,
+              tooltip: "Edit User",
+              onClick: (event, rowData) => {
+                history.push("/admin/users/edit", rowData);
+              },
             },
-          },
-        ]}
-      ></MaterialTable>
+          ]}
+        ></MaterialTable>
+      </div>
     </Container>
   );
 };

@@ -11,6 +11,8 @@ import adminHospitalReducer from "./admin/hospitalReducer";
 import hAdminUserReducer from "./hospitalAdmin/userReducer";
 import hAdminHospitalReducer from "./hospitalAdmin/hospitalReducer";
 import hAdminAppointmentReducer from "./hospitalAdmin/appointmentReducer";
+import hAdminAppointmentToMonthMetricsReducer from "./hospitalAdmin/metrics/appointmentToMonthMetricsReducer";
+import hAdminAppointmentToStatusMetricsReducer from "./hospitalAdmin/metrics/appointmentToStatusMetricsReducer";
 var formReducer = require("redux-form").reducer;
 
 export default combineReducers({
@@ -28,5 +30,9 @@ export default combineReducers({
   hospitalAdmin: combineReducers({
     myHospital: hAdminHospitalReducer,
     appointmentList: hAdminAppointmentReducer,
+    metrics: combineReducers({
+      appointmentToMonth: hAdminAppointmentToMonthMetricsReducer,
+      appointmentToStatus: hAdminAppointmentToStatusMetricsReducer,
+    }),
   }),
 });
