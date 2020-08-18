@@ -61,9 +61,19 @@ export const bookUserAppointment = (values, history) => async (dispatch) => {
     let year = new Date().getFullYear();
     let date = selectedDate.split("-")[0];
     let monthNumber = selectedDate.split("-")[1];
-    let appointmentDate = new Date(year, monthNumber, date);
+    let appointmentDate = new Date(year, monthNumber, date).setHours(
+      0,
+      0,
+      0,
+      0
+    );
     let appointmentTime = selectedTime;
     // let isNewUser = !userList.includes(email);s
+    debugger;
+    if (!appointmentDate || !name || !appointmentTime || !email) {
+      dispatch(showAlert({ type: "error", content: "Check all fields" }));
+      return;
+    }
     let appointmentData = {
       email,
       name,
@@ -75,6 +85,7 @@ export const bookUserAppointment = (values, history) => async (dispatch) => {
     };
     let config = getHeaderConfigWithTokens();
     if (config) {
+      debugger;
       const appointment = await axios.post(
         `${BASE_URL}/book`,
         appointmentData,
@@ -84,11 +95,13 @@ export const bookUserAppointment = (values, history) => async (dispatch) => {
       if (!tokens) {
         dispatch(showAlert({ type: "error", content: "Error with tokens" }));
         history.replace("/");
+        return;
       }
       dispatch({
         type: FETCH_HADMIN_APPOINTMENT_LIST_AFTER_CREATE,
         payload: appointment.data,
       });
+      history.replace("/hospital/appointment/list");
     } else {
       history.replace("/");
     }

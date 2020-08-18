@@ -10,6 +10,7 @@ import {
   makeStyles,
   Button,
   Grid,
+  Typography,
 } from "@material-ui/core";
 import { getFormattedDateForAppointment } from "../../../../utils";
 import MaterialTable from "material-table";
@@ -30,11 +31,19 @@ import { mainStyles } from "../../../../styles/styles";
 
 const useStyles = makeStyles(() => ({
   appointmentList: {
-    marginTop: "80px",
+    marginTop: "40px",
   },
   appoinemtDateSelect: {
     // width: "50px",
     marginTop: "12px",
+  },
+  appointmentDateText: {
+    marginTop: "10px",
+    fontSize: "18px",
+    fontWeight: "bold",
+  },
+  headingMargin: {
+    marginTop: "30px",
   },
 }));
 
@@ -119,37 +128,40 @@ let AppointmentListPage = (props) => {
         return (
           <React.Fragment key={appointmentDate}>
             <ListItem>
-              {getFormattedDateForAppointment(appointmentDate)}
+              <span className={classes.appointmentDateText}>
+                {getFormattedDateForAppointment(appointmentDate)}
+              </span>
             </ListItem>
-            <Divider />
-            <MaterialTable
-              icons={tableIcons}
-              columns={tableColumns}
-              title="Appointment List"
-              data={matchedAppointments}
-              options={{
-                filtering: true,
-              }}
-              actions={[
-                {
-                  icon: tableIcons.Edit,
-                  tooltip: "Edit Appointment",
-                  onClick: (event, rowData) => {
-                    history.push("/hospital/appointment/detail", rowData);
+            <ListItem>
+              <MaterialTable
+                icons={tableIcons}
+                columns={tableColumns}
+                title="Appointment List"
+                data={matchedAppointments}
+                options={{
+                  filtering: true,
+                }}
+                actions={[
+                  {
+                    icon: tableIcons.Edit,
+                    tooltip: "Edit Appointment",
+                    onClick: (event, rowData) => {
+                      history.push("/hospital/appointment/detail", rowData);
+                    },
                   },
-                },
-                {
-                  icon: tableIcons.Delete,
-                  tooltip: "Delete Appointment",
-                  onClick: async (event, rowData) => {
-                    props.showLoading();
-                    await props.deleteHospital(rowData.id);
-                    props.hideLoading();
-                    // history.push("/admin/questions/edit", rowData);
+                  {
+                    icon: tableIcons.Delete,
+                    tooltip: "Delete Appointment",
+                    onClick: async (event, rowData) => {
+                      props.showLoading();
+                      await props.deleteHospital(rowData.id);
+                      props.hideLoading();
+                      // history.push("/admin/questions/edit", rowData);
+                    },
                   },
-                },
-              ]}
-            ></MaterialTable>
+                ]}
+              ></MaterialTable>
+            </ListItem>
           </React.Fragment>
         );
       });
@@ -185,7 +197,10 @@ let AppointmentListPage = (props) => {
     <Container maxWidth="lg">
       <Grid container spacing={3}>
         <Grid item xs={3}>
-          <div className={classes.appoinemtDateSelect}>
+          <Typography variant="h4" className={classes.headingMargin}>
+            Appointment List
+          </Typography>
+          {/* <div className={classes.appoinemtDateSelect}>
             <Field
               type="text"
               name="dateToBeDisplayed"
@@ -196,7 +211,7 @@ let AppointmentListPage = (props) => {
 
               {renderAvailableAppointmentDatesSelect()}
             </Field>
-          </div>
+          </div> */}
         </Grid>
         <Grid item xs={3}></Grid>
         <Grid item xs={6}>
@@ -211,6 +226,7 @@ let AppointmentListPage = (props) => {
               todayLabel="All Dates"
               value={appointmentDateSelectedToView}
               onChange={showSelectedDateAppointments}
+              onOpen={() => console.log(appointmentDateSelectedToView)}
               shouldDisableDate={(date) => {
                 return !uniqueApDatesString.includes(new Date(date).getTime());
               }}
