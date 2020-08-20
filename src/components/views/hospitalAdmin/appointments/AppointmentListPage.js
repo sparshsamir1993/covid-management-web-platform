@@ -65,8 +65,6 @@ let AppointmentListPage = (props) => {
   useEffect(() => {
     console.log(props);
     changeAppointmentListState(props.appointmentList);
-
-    // const apDates = _.map(props.appointmentList, "appointmentDate");
     const apDates = props.appointmentList.map((ap) =>
       removeLastCharFromTime(ap.appointmentDate)
     );
@@ -77,7 +75,6 @@ let AppointmentListPage = (props) => {
     uniqueApDates.map((date) => {
       let dataToAdd = {};
       if (props.appointmentList && props.appointmentList.length) {
-        // debugger;
         const matchedAps = props.appointmentList.filter(
           (appointment) =>
             new Date(
@@ -89,7 +86,6 @@ let AppointmentListPage = (props) => {
         newApData.push(dataToAdd);
       }
     });
-    console.log(newApData);
     changeAppintmentListDayWise(newApData);
     changeAppintmentListDayWiseStatic(newApData);
   }, [props.appointmentList]);
@@ -97,7 +93,7 @@ let AppointmentListPage = (props) => {
   const classes = useStyles();
   useLayoutEffect(() => {
     const getHospitalListFromAPI = async () => {
-      await props.getHospitalAppointments(props.myHospital.id);
+      await props.getHospitalAppointments(props.myHospital.id, props.history);
     };
     if (props.myHospital?.id) {
       getHospitalListFromAPI();

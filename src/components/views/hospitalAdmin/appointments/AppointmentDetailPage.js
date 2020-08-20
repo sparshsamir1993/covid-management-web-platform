@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import MaterialTextField from "../../../utilComponents/MaterialTextField";
 import MaterialSelect from "../../../utilComponents/MaterialSelect";
 import * as AppointmentConstants from "../../../../constants/appointmentConstants";
-import { Button, Container, Card, makeStyles } from "@material-ui/core";
+import { Button, Container, Card, makeStyles, Grid } from "@material-ui/core";
 import { mainStyles } from "../../../../styles/styles";
 import {
   updateAppointmentStatus,
@@ -36,7 +36,7 @@ let AppointmentDetailPage = (props) => {
     appointmentData = props?.location?.state;
     console.log(props);
     props.setAppointmentData(appointmentData);
-  }, []);
+  }, [props.appointment]);
   // let [appointmentStatusState, setAppointmentStatusState] = useState();
   const renderAppointmentStatusTypes = () => {
     const statusTypes = [
@@ -58,6 +58,7 @@ let AppointmentDetailPage = (props) => {
     });
   };
   const classes = useStyles();
+  console.log(props);
   let { appointment } = props;
   console.log(appointment);
   if (appointment) {
@@ -66,41 +67,64 @@ let AppointmentDetailPage = (props) => {
     return (
       <Container maxWidth="lg">
         <Card className={classes.appointmentDetailCard}>
-          <h1>{appointmentStatus}</h1>
-          <br />
-          <form onSubmit={handleSubmit(onAppointmentUpdate)}>
-            <Field
-              type="text"
-              component={MaterialSelect}
-              label="Appointment Status"
-              name="appointmentStatus"
-            >
-              <option value=""></option>
-              {renderAppointmentStatusTypes()}
-            </Field>
-            <Button
-              variant="contained"
-              disabled={pristine || submitting}
-              className={appStyles.primaryButton}
-              type="submit"
-            >
-              Change Status
-            </Button>
-          </form>
+          <Grid container spacing={3}>
+            <Grid item xs={4}>
+              <h1>{appointmentStatus}</h1>
+            </Grid>
+          </Grid>
+          <Grid container spacing={3}>
+            <Grid item xs={8}>
+              Update appointment Status
+            </Grid>
+            <Grid item xs={4}>
+              <form onSubmit={handleSubmit(onAppointmentUpdate)}>
+                <Field
+                  type="text"
+                  component={MaterialSelect}
+                  label="Appointment Status"
+                  name="appointmentStatus"
+                  initialValues={{
+                    appointmentStatus: appointment.appointmentStatus
+                      ? appointment.appointmentStatus
+                      : "",
+                  }}
+                  {...{
+                    initialValues: {
+                      appointmentStatus: appointment.appointmentStatus
+                        ? appointment.appointmentStatus
+                        : "",
+                    },
+                  }}
+                >
+                  <option value=""></option>
+                  {renderAppointmentStatusTypes()}
+                </Field>
+                <Button
+                  variant="contained"
+                  disabled={pristine || submitting}
+                  className={appStyles.primaryButton}
+                  type="submit"
+                >
+                  Change Status
+                </Button>
+              </form>
+            </Grid>
+          </Grid>
         </Card>
       </Container>
     );
   } else {
+    // props.history.goBack();
     return <div></div>;
   }
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, props) => {
   console.log(state.hospitalAdmin);
   return {
     appointmentDetail: "",
     formValues: state.form.appointmentDetailForm,
-    appointment: state.hospitalAdmin.appointmentList[0],
+    appointment: state.hospitalAdmin.appointmentList[0] || props.location.state,
   };
 };
 
