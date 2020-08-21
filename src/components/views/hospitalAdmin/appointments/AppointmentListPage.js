@@ -1,5 +1,9 @@
 import React, { useLayoutEffect, useEffect, useState } from "react";
-import { getHospitalAppointments } from "../../../../actions";
+import {
+  getHospitalAppointments,
+  showLoading,
+  hideLoading,
+} from "../../../../actions";
 import { connect } from "react-redux";
 import _ from "lodash";
 import {
@@ -14,6 +18,7 @@ import {
 } from "@material-ui/core";
 import { getFormattedDateForAppointment } from "../../../../utils";
 import MaterialTable from "material-table";
+// import Edit from "../../../tableIcons";
 import tableIcons from "../../../tableIcons";
 import { useHistory } from "react-router-dom";
 import {
@@ -28,6 +33,7 @@ import {
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { mainStyles } from "../../../../styles/styles";
+import { Edit } from "@material-ui/icons";
 
 const useStyles = makeStyles(() => ({
   appointmentList: {
@@ -139,20 +145,11 @@ let AppointmentListPage = (props) => {
                 }}
                 actions={[
                   {
-                    icon: tableIcons.Edit,
+                    icon: () => <Edit color="error" />,
+                    color: "error",
                     tooltip: "Edit Appointment",
                     onClick: (event, rowData) => {
                       history.push("/hospital/appointment/detail", rowData);
-                    },
-                  },
-                  {
-                    icon: tableIcons.Delete,
-                    tooltip: "Delete Appointment",
-                    onClick: async (event, rowData) => {
-                      props.showLoading();
-                      await props.deleteHospital(rowData.id);
-                      props.hideLoading();
-                      // history.push("/admin/questions/edit", rowData);
                     },
                   },
                 ]}
@@ -196,18 +193,6 @@ let AppointmentListPage = (props) => {
           <Typography variant="h4" className={classes.headingMargin}>
             Appointment List
           </Typography>
-          {/* <div className={classes.appoinemtDateSelect}>
-            <Field
-              type="text"
-              name="dateToBeDisplayed"
-              onChange={showSelectedDateAppointments}
-              component={MaterialSelect}
-            >
-              <option key={""}>All Dates</option>
-
-              {renderAvailableAppointmentDatesSelect()}
-            </Field>
-          </div> */}
         </Grid>
         <Grid item xs={3}></Grid>
         <Grid item xs={6}>
@@ -247,9 +232,11 @@ const mapStateToProps = (state) => {
   };
 };
 
-AppointmentListPage = connect(mapStateToProps, { getHospitalAppointments })(
-  AppointmentListPage
-);
+AppointmentListPage = connect(mapStateToProps, {
+  getHospitalAppointments,
+  showLoading,
+  hideLoading,
+})(AppointmentListPage);
 AppointmentListPage = reduxForm({
   form: "currentAppointmentDateForm",
 })(AppointmentListPage);

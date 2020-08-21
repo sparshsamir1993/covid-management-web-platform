@@ -133,7 +133,10 @@ let AppointmentForm = (props) => {
   return (
     <React.Fragment>
       <Typography variant="h2">Book Appointment</Typography>
-      <form onSubmit={handleSubmit(onAppointmentSubmit)}>
+      <form
+        onSubmit={handleSubmit(onAppointmentSubmit)}
+        className={appStyles.mt25}
+      >
         <Field
           type="text"
           labelname="email"

@@ -134,6 +134,10 @@ export const updateAppointmentStatus = (values, history) => async (
       type: FETCH_HADMIN_APPOINTMENT_DETAIL_AFTER_UPDATE,
       payload: values,
     });
+    dispatch(
+      showAlert({ type: "success", content: "Status changed successfully" })
+    );
+    history.goBack();
   } else {
     history.replace("/");
   }

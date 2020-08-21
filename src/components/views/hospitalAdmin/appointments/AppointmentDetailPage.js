@@ -4,11 +4,24 @@ import { connect } from "react-redux";
 import MaterialTextField from "../../../utilComponents/MaterialTextField";
 import MaterialSelect from "../../../utilComponents/MaterialSelect";
 import * as AppointmentConstants from "../../../../constants/appointmentConstants";
-import { Button, Container, Card, makeStyles, Grid } from "@material-ui/core";
+import { getFormattedDateForAppointment, tConvert } from "../../../../utils";
+import {
+  Button,
+  Container,
+  Card,
+  makeStyles,
+  Grid,
+  Typography,
+  List,
+  ListItem,
+  Divider,
+} from "@material-ui/core";
 import { mainStyles } from "../../../../styles/styles";
 import {
   updateAppointmentStatus,
   setAppointmentData,
+  showLoading,
+  hideLoading,
 } from "../../../../actions";
 
 const useStyles = makeStyles(() => ({
@@ -25,6 +38,15 @@ const useStyles = makeStyles(() => ({
     height: 48,
     padding: "0 30px",
     margin: "100px",
+  },
+  appointmentDetailList: {
+    marginTop: "10px",
+  },
+  updateStatusText: {
+    justifyContent: "center",
+    textAlign: "center",
+    display: "flex",
+    flexDirection: "column",
   },
 }));
 let AppointmentDetailPage = (props) => {
@@ -52,29 +74,84 @@ let AppointmentDetailPage = (props) => {
     console.log(props.formValues?.values?.appointmentStatus);
     let { appointmentStatus } = props.formValues?.values;
 
-    props.updateAppointmentStatus({
-      appointmentStatus,
-      appointmentId: props.appointment.id,
-    });
+    props.updateAppointmentStatus(
+      {
+        appointmentStatus,
+        appointmentId: props.appointment.id,
+      },
+      props.history
+    );
   };
   const classes = useStyles();
-  console.log(props);
+
   let { appointment } = props;
-  console.log(appointment);
+
   if (appointment) {
-    let { appointmentStatus } = props.appointment;
-    console.log(appointmentStatus);
+    let {
+      appointmentStatus,
+      user,
+      appointmentDate,
+      appointmentTime,
+    } = props.appointment;
+    let dateToDisplay = getFormattedDateForAppointment(appointmentDate);
+    let timeToDisplay = tConvert(appointmentTime);
+
     return (
       <Container maxWidth="lg">
         <Card className={classes.appointmentDetailCard}>
           <Grid container spacing={3}>
-            <Grid item xs={4}>
-              <h1>{appointmentStatus}</h1>
+            <Grid item xs={12}>
+              <Typography variant="h3">Appointment Details</Typography>
+              <Divider className={appStyles.mt25} />
+
+              <List className={classes.appointmentDetailList}>
+                <ListItem>
+                  <Grid container>
+                    <Grid item xs={6}>
+                      <Typography variant="h5">User Email</Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography variant="h5">{user.email}</Typography>
+                    </Grid>
+                  </Grid>
+                </ListItem>
+                <ListItem>
+                  <Grid container>
+                    <Grid item xs={6}>
+                      <Typography variant="h5">Appointment Date</Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography variant="h5">{dateToDisplay}</Typography>
+                    </Grid>
+                  </Grid>
+                </ListItem>
+                <ListItem>
+                  <Grid container>
+                    <Grid item xs={6}>
+                      <Typography variant="h5">Appointment Time</Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography variant="h5">{timeToDisplay}</Typography>
+                    </Grid>
+                  </Grid>
+                </ListItem>
+                <ListItem>
+                  <Grid container>
+                    <Grid item xs={6}>
+                      <Typography variant="h5">Appointment Status</Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography variant="h5">{appointmentStatus}</Typography>
+                    </Grid>
+                  </Grid>
+                </ListItem>
+              </List>
             </Grid>
           </Grid>
-          <Grid container spacing={3}>
-            <Grid item xs={8}>
-              Update appointment Status
+          <Divider />
+          <Grid container spacing={3} className={appStyles.mt25}>
+            <Grid item xs={8} className={classes.updateStatusText}>
+              <Typography variant="h4">Update appointment status</Typography>
             </Grid>
             <Grid item xs={4}>
               <form onSubmit={handleSubmit(onAppointmentUpdate)}>
@@ -114,7 +191,7 @@ let AppointmentDetailPage = (props) => {
       </Container>
     );
   } else {
-    // props.history.goBack();
+    props.history.goBack();
     return <div></div>;
   }
 };
@@ -124,7 +201,7 @@ const mapStateToProps = (state, props) => {
   return {
     appointmentDetail: "",
     formValues: state.form.appointmentDetailForm,
-    appointment: state.hospitalAdmin.appointmentList[0] || props.location.state,
+    appointment: state.hospitalAdmin.appointmentList[0],
   };
 };
 
@@ -135,6 +212,8 @@ AppointmentDetailPage = reduxForm({
 AppointmentDetailPage = connect(mapStateToProps, {
   updateAppointmentStatus,
   setAppointmentData,
+  showLoading,
+  hideLoading,
 })(AppointmentDetailPage);
 
 export default AppointmentDetailPage;

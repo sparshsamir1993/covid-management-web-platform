@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import { logoutUser } from "../../actions";
+import { mainStyles } from "../../styles/styles";
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     position: "absolute",
@@ -27,6 +29,7 @@ function getModalStyle() {
 }
 
 const HeaderButtons = (props) => {
+  const appStyles = mainStyles();
   const classes = useStyles();
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = React.useState(getModalStyle);
@@ -43,7 +46,7 @@ const HeaderButtons = (props) => {
       <h2 id="simple-modal-title">You sure?</h2>
       <p id="simple-modal-description">Are you sure you want to log out?</p>
       <Button
-        color="inherit"
+        className={appStyles.logoutButton}
         onClick={() => {
           props.logoutUser();
           handleClose();
