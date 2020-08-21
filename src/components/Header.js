@@ -28,6 +28,7 @@ import ErrorAlert from "./alertComponent/CommonAlert";
 import { ADMIN_ROLE, HOSPITAL_ADMIN_ROLE } from "../constants";
 import { showLoading, hideLoading, getUser } from "../actions";
 import { checkAndUpdateTokens } from "../utils";
+import { mainStyles } from "../styles/styles";
 
 const drawerWidth = 240;
 
@@ -43,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
+    background: "green",
   },
   appBarShift: {
     width: `calc(100% - ${drawerWidth}px)`,
@@ -93,6 +95,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Header = (props) => {
   const classes = useStyles();
+  const appStyle = mainStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -118,7 +121,7 @@ const Header = (props) => {
     if (props.auth.role === ADMIN_ROLE) {
       return (
         <React.Fragment>
-          <Typography variant="h6" align="center">
+          <Typography variant="h6" align="center" className={appStyle.mt10}>
             Admin Links
           </Typography>
           <List>
@@ -153,18 +156,18 @@ const Header = (props) => {
     } else if (props.auth.role === HOSPITAL_ADMIN_ROLE) {
       return (
         <React.Fragment>
-          <Typography variant="h6" align="center">
+          <Typography variant="h6" align="center" className={appStyle.mt10}>
             Hospital Admin Links
           </Typography>
           <List>
-            <ListItem button key={"Patient List"} onClick={handleDrawerClose}>
+            {/* <ListItem button key={"Patient List"} onClick={handleDrawerClose}>
               <Link to="/hospital/users" className="nav-link">
                 <ListItemIcon>
                   <InboxIcon />
                 </ListItemIcon>
                 <ListItemText primary={"Pateint List"} />
               </Link>
-            </ListItem>
+            </ListItem> */}
             <ListItem
               button
               key={"Appointment List"}
@@ -202,14 +205,14 @@ const Header = (props) => {
     return (
       <React.Fragment>
         <List>
-          <ListItem button key={"Home"} onClick={handleDrawerClose}>
+          {/* <ListItem button key={"Home"} onClick={handleDrawerClose}>
             <Link to="/" className="nav-link">
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
               <ListItemText primary={"Home"} />
             </Link>
-          </ListItem>
+          </ListItem> */}
           <ListItem button key={"Dashboard"} onClick={handleDrawerClose}>
             <Link to="/" className="nav-link">
               <ListItemIcon>
@@ -218,18 +221,18 @@ const Header = (props) => {
               <ListItemText primary={"Dashboard"} />
             </Link>
           </ListItem>
-          <ListItem button key={"Profile"} onClick={handleDrawerClose}>
+          {/* <ListItem button key={"Profile"} onClick={handleDrawerClose}>
             <Link to="/" className="nav-link">
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
               <ListItemText primary={"Profile"} />
             </Link>
-          </ListItem>
+          </ListItem> */}
         </List>
         <Divider />
         {adminLinks()}
-        <List>
+        {/* <List>
           <ListItem button key={"Logout"} onClick={handleDrawerClose}>
             <Link to="/" className="nav-link">
               <ListItemIcon>
@@ -238,7 +241,7 @@ const Header = (props) => {
               <ListItemText primary={"Logout"} />
             </Link>
           </ListItem>
-        </List>
+        </List> */}
       </React.Fragment>
     );
   };

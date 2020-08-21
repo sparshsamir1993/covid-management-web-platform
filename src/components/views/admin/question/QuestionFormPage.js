@@ -1,6 +1,6 @@
 import React from "react";
 
-import { makeStyles, Container, Divider } from "@material-ui/core";
+import { makeStyles, Container, Divider, Typography } from "@material-ui/core";
 import QuestionForm from "./QuestionForm";
 import { connect } from "react-redux";
 import {
@@ -9,6 +9,7 @@ import {
 } from "../../../../actions/admin/adminQuestionActions";
 import QuestionOptionForm from "./QuestionOptionForm";
 import QuestionOptionList from "./QuestionOptionsList";
+import { mainStyles } from "../../../../styles/styles";
 
 const useStyles = makeStyles(() => ({
   questionForm: {
@@ -28,7 +29,7 @@ let QuestionFormPage = (props) => {
     };
     props.updateQuestionSubmit(data, props.history);
   };
-  console.log(props.location?.state);
+  let appStyles = mainStyles();
   const question = props.location?.state;
   return (
     <Container maxWidth="lg">
@@ -48,8 +49,11 @@ let QuestionFormPage = (props) => {
       </div>
       {question && (
         <React.Fragment>
-          <Divider />
-          <QuestionOptionList questionId={question.id} />
+          <Divider className={appStyles.mt25} />
+          <Typography variant="h4" className={appStyles.mt25}>
+            Question Options
+          </Typography>
+          <QuestionOptionList question={question} />
           <QuestionOptionForm questionId={question.id} />
         </React.Fragment>
       )}

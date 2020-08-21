@@ -1,12 +1,10 @@
 import _ from "lodash";
+
+import { FETCH_HADMIN_APPOINTMENT_TO_STATUS_METRICS } from "../../../constants/reducerConstants";
 export default function (state = [], action) {
   switch (action.type) {
-    case "FETCH_ADMIN_HOSPITAL_LIST":
+    case FETCH_HADMIN_APPOINTMENT_TO_STATUS_METRICS:
       return action.payload || false;
-    case "HOSPITAL_LIST_AFTER_DELETE":
-      let newState = state.filter((x) => x.id !== action.payload);
-      return newState;
-
     default:
       return state;
   }

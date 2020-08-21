@@ -1,12 +1,10 @@
 import _ from "lodash";
+
+import { FETCH_ADMIN_USERS_TO_MONTH_METRICS } from "../../../constants/reducerConstants";
 export default function (state = [], action) {
   switch (action.type) {
-    case "FETCH_ADMIN_HOSPITAL_LIST":
+    case FETCH_ADMIN_USERS_TO_MONTH_METRICS:
       return action.payload || false;
-    case "HOSPITAL_LIST_AFTER_DELETE":
-      let newState = state.filter((x) => x.id !== action.payload);
-      return newState;
-
     default:
       return state;
   }

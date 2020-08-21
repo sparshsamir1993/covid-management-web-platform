@@ -1,5 +1,9 @@
 import React, { useLayoutEffect, useEffect, useState } from "react";
-import { getHospitalAppointments } from "../../../../actions";
+import {
+  getHospitalAppointments,
+  showLoading,
+  hideLoading,
+} from "../../../../actions";
 import { connect } from "react-redux";
 import _ from "lodash";
 import {
@@ -8,16 +12,44 @@ import {
   Divider,
   Container,
   makeStyles,
+  Button,
+  Grid,
+  Typography,
 } from "@material-ui/core";
 import { getFormattedDateForAppointment } from "../../../../utils";
 import MaterialTable from "material-table";
+// import Edit from "../../../tableIcons";
 import tableIcons from "../../../tableIcons";
 import { useHistory } from "react-router-dom";
-import { tConvert } from "../../../../utils/appointmentUtils";
+import {
+  tConvert,
+  removeLastCharFromTime,
+} from "../../../../utils/appointmentUtils";
+import { Field, reduxForm } from "redux-form";
+import MaterialSelect from "../../../utilComponents/MaterialSelect";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
+import { mainStyles } from "../../../../styles/styles";
+import { Edit } from "@material-ui/icons";
 
 const useStyles = makeStyles(() => ({
   appointmentList: {
-    marginTop: "80px",
+    marginTop: "40px",
+  },
+  appoinemtDateSelect: {
+    // width: "50px",
+    marginTop: "12px",
+  },
+  appointmentDateText: {
+    marginTop: "10px",
+    fontSize: "18px",
+    fontWeight: "bold",
+  },
+  headingMargin: {
+    marginTop: "30px",
   },
 }));
 
@@ -25,33 +57,55 @@ let AppointmentListPage = (props) => {
   const history = useHistory();
   const [appointmentListState, changeAppointmentListState] = useState([]);
   const [appointmentListDayWise, changeAppintmentListDayWise] = useState([]);
+  const [datePickerOpen, changeDatePickerOpen] = useState(false);
+  const [
+    appointmentDateSelectedToView,
+    changeAppointmentDateSelectedToView,
+  ] = useState(null);
+  const [
+    appointmentListDayWiseStatic,
+    changeAppintmentListDayWiseStatic,
+  ] = useState([]);
+  const [uniqueAppointmentDates, changeUniqueAppointmentDates] = useState([]);
 
   useEffect(() => {
+    console.log(props);
     changeAppointmentListState(props.appointmentList);
-
-    const apDates = _.map(props.appointmentList, "appointmentDate");
+    const apDates = props.appointmentList.map((ap) =>
+      removeLastCharFromTime(ap.appointmentDate)
+    );
+    console.log(apDates);
     const uniqueApDates = _.uniq(apDates);
+    changeUniqueAppointmentDates(uniqueApDates);
     let newApData = [];
     uniqueApDates.map((date) => {
       let dataToAdd = {};
-      const matchedAps = props.appointmentList.filter(
-        (appointment) => appointment.appointmentDate === date
-      );
-      dataToAdd.appointmentDate = date;
-      dataToAdd.matchedAppointments = matchedAps;
-      newApData.push(dataToAdd);
+      if (props.appointmentList && props.appointmentList.length) {
+        const matchedAps = props.appointmentList.filter(
+          (appointment) =>
+            new Date(
+              removeLastCharFromTime(appointment.appointmentDate)
+            ).getTime() === new Date(date).getTime()
+        );
+        dataToAdd.appointmentDate = date;
+        dataToAdd.matchedAppointments = matchedAps;
+        newApData.push(dataToAdd);
+      }
     });
     changeAppintmentListDayWise(newApData);
+    changeAppintmentListDayWiseStatic(newApData);
   }, [props.appointmentList]);
+
   const classes = useStyles();
   useLayoutEffect(() => {
     const getHospitalListFromAPI = async () => {
-      await props.getHospitalAppointments(props.myHospital.id);
+      await props.getHospitalAppointments(props.myHospital.id, props.history);
     };
     if (props.myHospital?.id) {
       getHospitalListFromAPI();
     }
   }, [props.myHospital]);
+
   const tableColumns = [
     { title: "Id", field: "id" },
     { title: "User email", field: "user.email" },
@@ -73,55 +127,97 @@ let AppointmentListPage = (props) => {
     if (appointmentListState?.length) {
       return appointmentListDayWise.map((appointment) => {
         let { appointmentDate, matchedAppointments } = appointment;
-        console.log(matchedAppointments);
         return (
           <React.Fragment key={appointmentDate}>
             <ListItem>
-              {getFormattedDateForAppointment(appointmentDate)}
+              <span className={classes.appointmentDateText}>
+                {getFormattedDateForAppointment(appointmentDate)}
+              </span>
             </ListItem>
-            <Divider />
-            <MaterialTable
-              icons={tableIcons}
-              columns={tableColumns}
-              title="Appointment List"
-              data={matchedAppointments}
-              options={{
-                filtering: true,
-              }}
-              actions={[
-                {
-                  icon: tableIcons.Edit,
-                  tooltip: "Edit Hospital",
-                  onClick: (event, rowData) => {
-                    console.log(rowData);
-                    history.push("/admin/hospitals/edit", rowData);
+            <ListItem>
+              <MaterialTable
+                icons={tableIcons}
+                columns={tableColumns}
+                title="Appointment List"
+                data={matchedAppointments}
+                options={{
+                  filtering: true,
+                }}
+                actions={[
+                  {
+                    icon: () => <Edit color="error" />,
+                    color: "error",
+                    tooltip: "Edit Appointment",
+                    onClick: (event, rowData) => {
+                      history.push("/hospital/appointment/detail", rowData);
+                    },
                   },
-                },
-                {
-                  icon: tableIcons.Delete,
-                  tooltip: "Delete Hospital",
-                  onClick: async (event, rowData) => {
-                    console.log(rowData);
-                    console.log(props);
-                    props.showLoading();
-                    await props.deleteHospital(rowData.id);
-                    props.hideLoading();
-                    // history.push("/admin/questions/edit", rowData);
-                  },
-                },
-              ]}
-            ></MaterialTable>
+                ]}
+              ></MaterialTable>
+            </ListItem>
           </React.Fragment>
         );
       });
     }
   };
 
+  const renderAvailableAppointmentDatesSelect = () => {
+    return uniqueAppointmentDates.map((date) => (
+      <option key={date}>{getFormattedDateForAppointment(date)}</option>
+    ));
+  };
+
+  const showSelectedDateAppointments = (e) => {
+    console.log(e);
+    changeAppointmentDateSelectedToView(e);
+    console.log(appointmentListDayWise);
+    let sTime = new Date(e).setHours(0, 0, 0, 0);
+    // debugger;
+    if (!sTime || sTime == NaN) {
+      changeAppintmentListDayWise(appointmentListDayWiseStatic);
+      return;
+    }
+    // debugger;
+    let newArr = appointmentListDayWiseStatic.filter(
+      (ap) => new Date(ap.appointmentDate).getTime() == sTime
+    );
+    changeAppintmentListDayWise(newArr);
+  };
+  let uniqueApDatesString = uniqueAppointmentDates.map((date) =>
+    new Date(date).getTime()
+  );
   return (
     <Container maxWidth="lg">
+      <Grid container spacing={3}>
+        <Grid item xs={3}>
+          <Typography variant="h4" className={classes.headingMargin}>
+            Appointment List
+          </Typography>
+        </Grid>
+        <Grid item xs={3}></Grid>
+        <Grid item xs={6}>
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <KeyboardDatePicker
+              disableToolbar
+              variant="oulined"
+              format="MM/dd/yyyy"
+              margin="normal"
+              id="date-picker-inline"
+              label="Select Date"
+              todayLabel="All Dates"
+              value={appointmentDateSelectedToView}
+              onChange={showSelectedDateAppointments}
+              onOpen={() => console.log(appointmentDateSelectedToView)}
+              shouldDisableDate={(date) => {
+                return !uniqueApDatesString.includes(new Date(date).getTime());
+              }}
+            />
+          </MuiPickersUtilsProvider>
+        </Grid>
+      </Grid>
+
       <List className={classes.appointmentList}>
         {renderAppointmentList()}
-        <ListItem>20 july</ListItem>
         <Divider />
       </List>
     </Container>
@@ -132,10 +228,16 @@ const mapStateToProps = (state) => {
   return {
     appointmentList: state.hospitalAdmin.appointmentList,
     myHospital: state.hospitalAdmin.myHospital,
+    formValues: state.form.currentAppointmentDateForm,
   };
 };
 
-AppointmentListPage = connect(mapStateToProps, { getHospitalAppointments })(
-  AppointmentListPage
-);
+AppointmentListPage = connect(mapStateToProps, {
+  getHospitalAppointments,
+  showLoading,
+  hideLoading,
+})(AppointmentListPage);
+AppointmentListPage = reduxForm({
+  form: "currentAppointmentDateForm",
+})(AppointmentListPage);
 export default AppointmentListPage;

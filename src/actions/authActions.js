@@ -9,14 +9,12 @@ export const loginUser = (body, history) => async (dispatch) => {
   try {
     const user = await axios.post(`${BASE_URL}/login`, body);
     let { token, refreshToken } = user.data;
-    console.log(token, refreshToken);
     let tokens = checkAndUpdateTokens(token, refreshToken);
     dispatch(await getUser(tokens, history));
     dispatch(
       showAlert({ type: "success", content: "Signed in Successfully !!" })
     );
   } catch (err) {
-    console.log(err.response);
     if (
       err.response &&
       (err.response.status === 403 || err.response.status === 401)
@@ -59,7 +57,6 @@ export const getUser = (tokens) => async (dispatch) => {
   checkAndUpdateTokens(token, refreshToken);
   dispatch({ type: "FETCH_USER", payload: user.data });
   if (user.data.hospitalAdmin?.id) {
-    console.log(user.data.hospitalAdmin);
     dispatch({
       type: FETCH_HADMIN_HOSPITAL,
       payload: user.data.hospitalAdmin.hospital,
@@ -75,4 +72,5 @@ export const logoutUser = () => (dispatch) => {
   }
   dispatch(showAlert({ type: "error", content: "Logged Out !!" }));
   dispatch({ type: "FETCH_USER", payload: {} });
+  window.location.replace("/");
 };

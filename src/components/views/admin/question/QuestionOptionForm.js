@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { reduxForm, Field } from "redux-form";
-import { Button } from "@material-ui/core";
+import { Button, FormControlLabel, Checkbox } from "@material-ui/core";
 import MaterialTextField from "../../../utilComponents/MaterialTextField";
 import { connect } from "react-redux";
 import {
@@ -11,37 +11,69 @@ import {
   updateOption,
 } from "../../../../actions";
 let QuestionOptionForm = (props) => {
-  const [initialContent, setInitialContnet] = useState("");
+  const [initialContent, setInitialContent] = useState("");
+  const [isOptionCorrect, setIsOptionCorrect] = useState(false);
   useEffect(() => {
     if (props.initialValues) {
-      console.log(props.initialValues.optionContent);
-      setInitialContnet(props.initialValues.optionContent);
+      setInitialContent(props.initialValues.optionContent);
     }
   }, [props.initialValues.optionContent]);
 
+  useEffect(() => {
+    return () => {
+      // cleanup
+      props.deselectOption();
+    };
+  }, []);
   const addQuestionOption = () => {
     if (props.initialValues.optionContent) {
       props.updateOption({
         optionId: props.initialValues.id,
+        questionId: props.initialValues.questionId,
         optionContent: props.formValues.values.optionContent,
+        isCorrectOption: props.formValues?.values?.isCorrectOption,
       });
       props.deselectOption();
     } else {
       props.createQuestionOption({
         questionId: props.questionId,
         optionContent: props.formValues.values.optionContent,
+        isCorrectOption: props.formValues?.values?.isCorrectOption,
       });
       props.reset();
     }
   };
-  const { handleSubmit, submitting, pristine, isEdit, initialValues } = props;
+  const {
+    handleSubmit,
+    submitting,
+    pristine,
+    isEdit,
+    initialValues,
+    input,
+  } = props;
   console.log(initialValues);
   return (
     <form onSubmit={handleSubmit(() => addQuestionOption())}>
       <Field
         name="optionContent"
         component={MaterialTextField}
+        initialValues={initialValues}
         label="Option Content"
+      />
+      <Field
+        name="isCorrectOption"
+        component={({ input }) => (
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={isOptionCorrect}
+                checked={input.value ? true : false}
+                onChange={input.onChange}
+              />
+            }
+            label="Correct Option ?"
+          />
+        )}
       />
       <Button
         variant="contained"
@@ -66,9 +98,16 @@ let QuestionOptionForm = (props) => {
   );
 };
 const mapStateToProps = (state) => {
+  console.log(state);
+  let isCorrectOption;
+  if (state.selectedOption.id) {
+    isCorrectOption =
+      state.selectedOption?.id ==
+      state.selectedOption?.question?.correctOptionId;
+  }
   return {
     formValues: state.form.questionOptionForm,
-    initialValues: state.selectedOption,
+    initialValues: { ...state.selectedOption, isCorrectOption },
   };
 };
 

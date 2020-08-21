@@ -13,12 +13,8 @@ const LinkBehavior = React.forwardRef((props, ref) => (
 let LoginForm = (props) => {
   let history = useHistory();
   const submitLogin = async (values, dispatch) => {
-    console.log(props);
-
     let { email, password } = values;
-
     if (!email || !password) {
-      console.log("eroor is iheere");
       throw new SubmissionError({
         _error: "Please make sure email and password is provided",
       });

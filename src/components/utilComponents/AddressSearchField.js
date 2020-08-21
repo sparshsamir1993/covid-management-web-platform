@@ -3,12 +3,13 @@ import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from "react-places-autocomplete";
+import { TextField } from "@material-ui/core";
+import clsx from "clsx";
 // import "../../../styles/main.scss";
 
 class AddressSearchField extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
       address: "",
       currentAddress: this.props.initialValue ? this.props.initialValue : "",
@@ -21,9 +22,6 @@ class AddressSearchField extends React.Component {
       this.props.onAddressSelect({});
     }
   };
-  componentDidMount() {
-    console.log(this.props);
-  }
   handleSelect = async (address) => {
     this.setState({ address });
     const { input } = this.props;
@@ -52,6 +50,7 @@ class AddressSearchField extends React.Component {
           this.props.initialValue ? this.props.initialValue : this.state.address
         }
         onChange={this.handleChange}
+        style={{ width: "100%" }}
         onSelect={this.handleSelect}
         onError={this.showError}
         searchOptions={searchOptions}
@@ -59,22 +58,19 @@ class AddressSearchField extends React.Component {
       >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
           <div>
-            <label>Address</label>
-            <input
+            <TextField
               {...getInputProps({
                 placeholder: "Search Places ...",
-                className: "location-search-input",
+                className: clsx("location-search-input", this.props.className),
                 name: "detailedAddress",
               })}
             />
             <div className="autocomplete-dropdown-container">
               {loading && <div>Loading...</div>}
               {suggestions.map((suggestion) => {
-                // console.log(suggestion);
                 const className = suggestion.active
                   ? "suggestion-item--active"
                   : "suggestion-item";
-                // inline style for demonstration purpose
                 const style = suggestion.active
                   ? { backgroundColor: "#fafafa", cursor: "pointer" }
                   : { backgroundColor: "#ffffff", cursor: "pointer" };
@@ -83,6 +79,7 @@ class AddressSearchField extends React.Component {
                     {...getSuggestionItemProps(suggestion, {
                       className,
                       style,
+                      key: suggestion.description,
                     })}
                   >
                     <span>{suggestion.description}</span>

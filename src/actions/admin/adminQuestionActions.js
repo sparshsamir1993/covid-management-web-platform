@@ -11,7 +11,6 @@ export const getQuestionList = (history) => async (dispatch) => {
   try {
     let config = getHeaderConfigWithTokens();
     if (config) {
-      console.log(config);
       const questions = await axios.get(`${BASE_URL}`, config);
       let tokens = checkResponseAuthHeaders(questions.headers);
       if (!tokens) {
@@ -35,7 +34,6 @@ export const createNewQuestion = (values, history) => async (dispatch) => {
   try {
     let config = getHeaderConfigWithTokens();
     if (config) {
-      console.log(values);
       const question = await axios.post(`${BASE_URL}`, values, config);
       let tokens = checkResponseAuthHeaders(question.headers);
       if (!tokens) {
@@ -61,7 +59,6 @@ export const updateQuestionSubmit = (values, history) => async (dispatch) => {
   try {
     let config = getHeaderConfigWithTokens();
     if (config) {
-      console.log(values);
       const question = await axios.patch(`${BASE_URL}`, values, config);
       let tokens = checkResponseAuthHeaders(question.headers);
       if (!tokens) {
@@ -88,7 +85,6 @@ export const deleteQuestion = (id, history) => async (dispatch) => {
     let config = getHeaderConfigWithTokens();
     if (config) {
       const result = await axios.delete(`${BASE_URL}/${id}`, config);
-      console.log(result);
       if (result.status === 200) {
         dispatch({ type: "QUESTION_LIST_AFTER_DELETE", payload: id });
       } else {

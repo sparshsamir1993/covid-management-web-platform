@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   FormControl,
   InputLabel,
@@ -20,12 +20,14 @@ const renderFromHelper = ({ touched, error }) => {
 };
 
 const MaterialSelect = (props) => {
+  let [iVal, setIVal] = useState("");
   const classes = useStyles();
   const {
     input,
     label,
     meta: { touched, error },
     children,
+    initialValues,
     ...custom
   } = props;
   return (
@@ -34,6 +36,16 @@ const MaterialSelect = (props) => {
       <Select
         native
         {...input}
+        value={
+          iVal
+            ? iVal
+            : initialValues?.[input.name]
+            ? initialValues[input.name]
+            : ""
+        }
+        onChange={(e) => {
+          setIVal(e.currentTarget.value);
+        }}
         inputProps={{
           name: "role",
           id: "role-native-simple",

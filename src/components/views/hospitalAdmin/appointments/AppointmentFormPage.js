@@ -3,25 +3,29 @@ import { Container, Typography } from "@material-ui/core";
 import AppointmentForm from "./AppointmentForm";
 import { connect } from "react-redux";
 import { bookUserAppointment } from "../../../../actions/hospitalAdmin/hAdminAppointmentActions";
+import { mainStyles } from "../../../../styles/styles";
 
 let AppointmentFormPage = (props) => {
   const createNewAppointment = async () => {
-    console.log(props.formValues.values);
-
-    await props.bookUserAppointment({
-      ...props.formValues.values,
-      hospitalId: props.adminHospital.id,
-    });
+    await props.bookUserAppointment(
+      {
+        ...props.formValues.values,
+        hospitalId: props.adminHospital.id,
+      },
+      props.history
+    );
   };
+  const appStyles = mainStyles();
   return (
     <Container maxWidth="lg">
-      <AppointmentForm onAppointmentSubmit={createNewAppointment} />
+      <div className={appStyles.mt100}>
+        <AppointmentForm onAppointmentSubmit={createNewAppointment} />
+      </div>
     </Container>
   );
 };
 
 const mapStateToProps = (state) => {
-  console.log(state);
   return {
     formValues: state.form.hAdminAppointmentForm,
     adminHospital: state.hospitalAdmin.myHospital,

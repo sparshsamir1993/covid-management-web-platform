@@ -10,6 +10,8 @@ import {
   deleteHospital,
 } from "../../../../actions";
 import { connect } from "react-redux";
+import { mainStyles } from "../../../../styles/styles";
+import clsx from "clsx";
 
 const tableColumns = [
   { title: "Id", field: "id" },
@@ -23,15 +25,19 @@ const useStyles = makeStyles(() => ({
   dataTable: {
     marginTop: "80px",
   },
+  createButton: {
+    marginTop: "50px",
+    marginBottom: "30px",
+  },
 }));
 const HospitalList = (props) => {
+  let appStyles = mainStyles();
   const classes = useStyles();
   const history = useHistory();
   const [adminHospitalList, changeAdminHospitalList] = useState([]);
 
   useEffect(() => {
     if (props.hospitals?.length > 0) {
-      console.log(props.hospitals);
       changeAdminHospitalList([...props.hospitals]);
     }
   }, [props.hospitals]);
@@ -47,11 +53,12 @@ const HospitalList = (props) => {
 
   return (
     <Container maxWidth="lg">
-      <div className={classes.dataTable}>
+      <div className={clsx(classes.dataTable)}>
         <Button
           variant="outlined"
           color="primary"
           onClick={() => props.history.push("/admin/hospitals/new")}
+          className={clsx(appStyles.primaryButton, classes.createButton)}
         >
           Create Hospital
         </Button>
@@ -69,7 +76,6 @@ const HospitalList = (props) => {
               icon: tableIcons.Edit,
               tooltip: "Edit Hospital",
               onClick: (event, rowData) => {
-                console.log(rowData);
                 history.push("/admin/hospitals/edit", rowData);
               },
             },
@@ -77,8 +83,6 @@ const HospitalList = (props) => {
               icon: tableIcons.Delete,
               tooltip: "Delete Hospital",
               onClick: async (event, rowData) => {
-                console.log(rowData);
-                console.log(props);
                 props.showLoading();
                 await props.deleteHospital(rowData.id);
                 props.hideLoading();

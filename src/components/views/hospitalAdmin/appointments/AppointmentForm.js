@@ -8,19 +8,20 @@ import {
   getUserListForHospital,
   getHospitalAppointments,
 } from "../../../../actions";
-import { Button, MenuItem } from "@material-ui/core";
+import { Button, MenuItem, Typography } from "@material-ui/core";
 import {
   generateAppointmentDates,
   generateAppointmentHours,
+  removeLastCharFromTime,
 } from "../../../../utils";
 import _ from "lodash";
+import { mainStyles } from "../../../../styles/styles";
 const changeFormEmail = (newValue, props) => (dispatch) => {
   let user = props.userList.filter((user) => user.email === newValue)[0];
   let isNewUser = user?.email ? false : true;
 
   dispatch(change("hAdminAppointmentForm", "email", newValue));
   dispatch(change("hAdminAppointmentForm", "isNewUser", isNewUser));
-  console.log(user);
   if (!isNewUser && user.id) {
     dispatch(change("hAdminAppointmentForm", "name", user.name));
     dispatch(change("hAdminAppointmentForm", "userId", user.id));
@@ -30,10 +31,6 @@ const changeFormEmail = (newValue, props) => (dispatch) => {
 };
 let AppointmentForm = (props) => {
   const { handleSubmit, onAppointmentSubmit, pristine, submitting } = props;
-
-  useEffect(() => {
-    console.log(props.userList);
-  }, [props.userList]);
 
   useLayoutEffect(() => {
     // for getting user list
@@ -76,34 +73,47 @@ let AppointmentForm = (props) => {
     const slots = generateAppointmentHours();
     let selectedDateAppointments = [];
     let bookedApTimes = [];
+    console.log(props.formValues?.values);
     if (props.formValues?.values?.selectedDate) {
+      console.log(props);
       selectedDateAppointments = props.appointmentList.filter((appointment) => {
         let selectedDate = props.formValues?.values?.selectedDate;
         if (selectedDate) {
           let year = new Date().getFullYear();
           let date = selectedDate.split("-")[0];
           let monthNumber = selectedDate.split("-")[1];
+          // debugger;
           let appointmentDate = new Date(year, monthNumber, date);
-          console.log(appointment.appointmentDate, appointmentDate);
+          // debugger;
+          let currentApDate = removeLastCharFromTime(
+            appointment.appointmentDate
+          );
           if (
-            new Date(appointment.appointmentDate).getDate() ==
-            new Date(appointmentDate).getDate()
+            new Date(currentApDate).getTime() ==
+            new Date(appointmentDate).getTime()
           ) {
             return true;
           }
         }
       });
+      console.log(selectedDateAppointments);
       bookedApTimes = selectedDateAppointments.map(
         (appointment) => appointment.appointmentTime.split(":")?.[0]
       );
-      console.log(slots, bookedApTimes, selectedDateAppointments);
     }
     const unBookedSlots = slots.map((slot) => {
+      // console.log(bookedApTimes);
+
+      if (slot.hourValue < 10) {
+        slot.hourValue = "0" + slot.hourValue;
+      }
+      // console.log(slot.hourValue);
       if (slot && bookedApTimes.includes(slot.hourValue + "")) {
         slot.isBooked = true;
       }
       return slot;
     });
+    // debugger;
     console.log(unBookedSlots);
     return unBookedSlots.map((slot) => {
       if (slot) {
@@ -119,10 +129,14 @@ let AppointmentForm = (props) => {
       }
     });
   };
-
+  const appStyles = mainStyles();
   return (
     <React.Fragment>
-      <form onSubmit={handleSubmit(onAppointmentSubmit)}>
+      <Typography variant="h2">Book Appointment</Typography>
+      <form
+        onSubmit={handleSubmit(onAppointmentSubmit)}
+        className={appStyles.mt25}
+      >
         <Field
           type="text"
           labelname="email"
@@ -132,40 +146,55 @@ let AppointmentForm = (props) => {
           component={MaterialAutoComplete}
           label="email"
           name="email"
-        ></Field>
-        <Field
-          type="text"
-          component={MaterialTextField}
-          label="Name"
-          name="name"
-        ></Field>
-        <Field
-          name="selectedDate"
-          label="Choose Date"
-          component={MaterialSelect}
           {...{
-            initialValue: props.initialValues ? props.initialValues : "",
+            className: appStyles.mt10,
           }}
-        >
-          <option value=""></option>
-          {renderAppointmentDates()}
-        </Field>
-        <Field
-          name="selectedTime"
-          label="Choose Time"
-          component={MaterialSelect}
-          {...{
-            initialValue: props.initialValues ? props.initialValues : "",
-          }}
-        >
-          <option value=""></option>
-          {props.formValues?.values?.selectedDate && renderAppointmentHours()}
-        </Field>
+        ></Field>
+        <div className={appStyles.mt10}>
+          <Field
+            type="text"
+            component={MaterialTextField}
+            label="Name"
+            name="name"
+            {...{
+              className: appStyles.mt10,
+            }}
+          ></Field>
+        </div>
+        <div className={appStyles.mt10}>
+          <Field
+            name="selectedDate"
+            label="Choose Date"
+            component={MaterialSelect}
+            {...{
+              initialValue: props.initialValues ? props.initialValues : "",
+            }}
+            className={appStyles.mt10}
+          >
+            <option value=""></option>
+            {renderAppointmentDates()}
+          </Field>
+        </div>
+        <div className={appStyles.mt10}>
+          <Field
+            name="selectedTime"
+            label="Choose Time"
+            component={MaterialSelect}
+            {...{
+              initialValue: props.initialValues ? props.initialValues : "",
+            }}
+            className={appStyles.mt10}
+          >
+            <option value=""></option>
+            {props.formValues?.values?.selectedDate && renderAppointmentHours()}
+          </Field>
+        </div>
         <Button
           variant="contained"
           disabled={pristine || submitting}
           color="primary"
           type="submit"
+          className={appStyles.primaryButton}
         >
           Book Appointment
         </Button>
@@ -175,7 +204,6 @@ let AppointmentForm = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  // console.log(state.hospitalUserList);
   return {
     userList: state.hospitalUserList,
     initialValues: { isNewUser: false },

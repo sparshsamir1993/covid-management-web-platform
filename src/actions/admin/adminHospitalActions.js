@@ -11,7 +11,6 @@ export const getHospitalList = (history) => async (dispatch) => {
   try {
     let config = getHeaderConfigWithTokens();
     if (config) {
-      console.log(config);
       const hospitals = await axios.get(`${BASE_URL}`, config);
       let tokens = checkResponseAuthHeaders(hospitals.headers);
       if (!tokens) {
@@ -23,20 +22,24 @@ export const getHospitalList = (history) => async (dispatch) => {
       history.replace("/");
     }
   } catch (err) {
+    history.replace("/");
     if (err.response?.status) {
       if (err.response.status === 403 || err.response.status === 500) {
-        dispatch(showAlert({ type: "error", content: err.response.message }));
+        dispatch(
+          showAlert({
+            type: "error",
+            content: err.response.message || err.response.data,
+          })
+        );
       }
     }
   }
 };
 
 export const createNewHospital = (data, history) => async (dispatch) => {
-  console.log(data);
   try {
     let config = getHeaderConfigWithTokens();
     if (config) {
-      console.log(config);
       const hospital = await axios.post(`${BASE_URL}`, data, config);
       let tokens = checkResponseAuthHeaders(hospital.headers);
       if (!tokens) {
@@ -88,7 +91,6 @@ export const deleteHospital = (id, history) => async (dispatch) => {
     let config = getHeaderConfigWithTokens();
     if (config) {
       const result = await axios.delete(`${BASE_URL}/${id}`, config);
-      console.log(result);
       if (result.status === 200) {
         dispatch({ type: "HOSPITAL_LIST_AFTER_DELETE", payload: id });
       } else {

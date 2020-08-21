@@ -35,13 +35,19 @@ export const generateAppointmentHours = () => {
 };
 
 export const getFormattedDateForAppointment = (date) => {
-  console.log(date);
-  date = new Date(date);
-  return new Intl.DateTimeFormat("en", {
+  // console.log(date);
+  let newDateString = (date + "").substring(0, date.length - 1);
+  // console.log(newDateString);
+  let newDate1 = new Date(newDateString);
+  // console.log(date.substring(0, date.length - 1));
+  // console.log(newDate1);
+  let newDate = new Intl.DateTimeFormat("en-US", {
     year: "numeric",
     month: "long",
     day: "2-digit",
-  }).format(date);
+  }).format(newDate1);
+  // console.log(newDate);
+  return newDate;
 };
 
 export const tConvert = (time) => {
@@ -57,4 +63,8 @@ export const tConvert = (time) => {
     time[0] = +time[0] % 12 || 12; // Adjust hours
   }
   return time.join(""); // return adjusted time or original string
+};
+
+export const removeLastCharFromTime = (time) => {
+  return (time + "").substring(0, time.length - 1);
 };

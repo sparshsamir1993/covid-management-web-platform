@@ -12,7 +12,6 @@ export const getUserListForHospital = (history) => async (dispatch) => {
   try {
     let config = getHeaderConfigWithTokens();
     if (config) {
-      console.log(config);
       const userList = await axios.get(`${BASE_URL}`, config);
       let tokens = checkResponseAuthHeaders(userList.headers);
       if (!tokens) {

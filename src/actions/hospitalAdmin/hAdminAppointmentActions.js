@@ -5,7 +5,12 @@ import {
   checkResponseAuthHeaders,
 } from "../../utils";
 import { showAlert } from "../alertActions";
-import { FETCH_HADMIN_APPOINTMENT_LIST } from "../../constants/reducerConstants";
+import {
+  FETCH_HADMIN_APPOINTMENT_LIST,
+  FETCH_HADMIN_APPOINTMENT_LIST_AFTER_CREATE,
+  FETCH_HADMIN_APPOINTMENT_DETAIL_AFTER_UPDATE,
+  FETCH_HADMIN_APPOINTMENT_DETAIL,
+} from "../../constants/reducerConstants";
 const BASE_URL = `${API_BASE_URL}/hospital/appointment`;
 const getMonthFromString = (mon) => {
   let d = Date.parse(mon + "1, 2012");
@@ -19,8 +24,6 @@ export const getHospitalAppointments = (hospitalId, history) => async (
   dispatch
 ) => {
   try {
-    console.log(hospitalId);
-
     let config = getHeaderConfigWithTokens();
     if (config) {
       let appointmentList = await axios.get(
@@ -55,13 +58,22 @@ export const bookUserAppointment = (values, history) => async (dispatch) => {
       userId,
       hospitalId,
     } = values;
-    console.log(selectedDate, selectedTime);
     let year = new Date().getFullYear();
     let date = selectedDate.split("-")[0];
     let monthNumber = selectedDate.split("-")[1];
-    let appointmentDate = new Date(year, monthNumber, date);
+    let appointmentDate = new Date(year, monthNumber, date).setHours(
+      0,
+      0,
+      0,
+      0
+    );
     let appointmentTime = selectedTime;
     // let isNewUser = !userList.includes(email);s
+    debugger;
+    if (!appointmentDate || !name || !appointmentTime || !email) {
+      dispatch(showAlert({ type: "error", content: "Check all fields" }));
+      return;
+    }
     let appointmentData = {
       email,
       name,
@@ -71,9 +83,9 @@ export const bookUserAppointment = (values, history) => async (dispatch) => {
       userId,
       hospitalId,
     };
-    console.log(appointmentData);
     let config = getHeaderConfigWithTokens();
     if (config) {
+      debugger;
       const appointment = await axios.post(
         `${BASE_URL}/book`,
         appointmentData,
@@ -83,11 +95,13 @@ export const bookUserAppointment = (values, history) => async (dispatch) => {
       if (!tokens) {
         dispatch(showAlert({ type: "error", content: "Error with tokens" }));
         history.replace("/");
+        return;
       }
       dispatch({
-        type: FETCH_HADMIN_APPOINTMENT_LIST,
+        type: FETCH_HADMIN_APPOINTMENT_LIST_AFTER_CREATE,
         payload: appointment.data,
       });
+      history.replace("/hospital/appointment/list");
     } else {
       history.replace("/");
     }
@@ -98,4 +112,40 @@ export const bookUserAppointment = (values, history) => async (dispatch) => {
       }
     }
   }
+};
+
+export const updateAppointmentStatus = (values, history) => async (
+  dispatch
+) => {
+  console.log(values);
+  let config = getHeaderConfigWithTokens();
+  if (config) {
+    const hasAppointmentUpdated = await axios.put(
+      `${BASE_URL}/updateAppointmentStatus`,
+      values,
+      config
+    );
+    let tokens = checkResponseAuthHeaders(hasAppointmentUpdated.headers);
+    if (!tokens) {
+      dispatch(showAlert({ type: "error", content: "Error with tokens" }));
+      history.replace("/");
+    }
+    dispatch({
+      type: FETCH_HADMIN_APPOINTMENT_DETAIL_AFTER_UPDATE,
+      payload: values,
+    });
+    dispatch(
+      showAlert({ type: "success", content: "Status changed successfully" })
+    );
+    history.goBack();
+  } else {
+    history.replace("/");
+  }
+};
+
+export const setAppointmentData = (values, history) => async (dispatch) => {
+  dispatch({
+    type: FETCH_HADMIN_APPOINTMENT_DETAIL,
+    payload: values,
+  });
 };

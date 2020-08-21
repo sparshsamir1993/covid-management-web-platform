@@ -3,8 +3,6 @@ export default function (state = [], action) {
   let newState;
   switch (action.type) {
     case "FETCH_ADMIN_QUESTION_LIST":
-      //   const userListObj = _.keyBy(action.payload.data, "id");
-      //   console.log(action.payload);
       return action.payload.data || false;
     case "QUESTION_LIST_AFTER_UPDATE":
       let qTbUpdated = state.filter((x) => x.id == action.payload.id);
