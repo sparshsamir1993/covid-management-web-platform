@@ -2,12 +2,19 @@ import React from "react";
 import { reduxForm, Field } from "redux-form";
 import { connect } from "react-redux";
 import MaterialTextField from "../../../utilComponents/MaterialTextField";
-import { Button, Typography } from "@material-ui/core";
+import { Button, Typography, makeStyles } from "@material-ui/core";
 import AddressSearchField from "../../../utilComponents/AddressSearchField";
 import { setSelectedHospitalAddress } from "../../../../actions";
 import { mainStyles } from "../../../../styles/styles";
+import clsx from "clsx";
 
+let useStyles = makeStyles(() => ({
+  width100: {
+    width: "100%",
+  },
+}));
 let HospitalForm = (props) => {
+  let classes = useStyles();
   const {
     handleSubmit,
     submitQuestion,
@@ -24,7 +31,12 @@ let HospitalForm = (props) => {
       </Typography>
       <form onSubmit={handleSubmit(submitQuestion)}>
         <div className={appStyles.mt25}>
-          <Field name="name" component={MaterialTextField} label="Name" />
+          <Field
+            name="name"
+            component={MaterialTextField}
+            label="Name"
+            initialValues={props.initialValues}
+          />
         </div>
         <div className={appStyles.mt25}>
           <Field
@@ -32,6 +44,7 @@ let HospitalForm = (props) => {
             component={MaterialTextField}
             label="Contact"
             className={appStyles.mt100}
+            initialValues={props.initialValues}
           />
         </div>
         <div className={appStyles.mt25}>
@@ -45,8 +58,9 @@ let HospitalForm = (props) => {
               initialValue: props.initialValues
                 ? props.initialValues.detailedAddress
                 : "",
+              className: clsx(appStyles.mt25, classes.width100),
             }}
-            className={appStyles.mt25}
+            className={clsx(appStyles.mt25, classes.width100)}
           />
         </div>
         <div className={appStyles.mt25}>

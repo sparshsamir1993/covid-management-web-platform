@@ -13,7 +13,6 @@ export const getHospitalList = (history) => async (dispatch) => {
     if (config) {
       const hospitals = await axios.get(`${BASE_URL}`, config);
       let tokens = checkResponseAuthHeaders(hospitals.headers);
-      debugger;
       if (!tokens) {
         dispatch(showAlert({ type: "error", content: "Error with tokens" }));
         history.replace("/");
@@ -23,7 +22,6 @@ export const getHospitalList = (history) => async (dispatch) => {
       history.replace("/");
     }
   } catch (err) {
-    // console.log(err.response);
     history.replace("/");
     if (err.response?.status) {
       if (err.response.status === 403 || err.response.status === 500) {
