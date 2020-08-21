@@ -3,6 +3,7 @@ import { Container, makeStyles, Button } from "@material-ui/core";
 import MaterialTable from "material-table";
 import { useHistory } from "react-router-dom";
 import tableIcons from "../../../tableIcons";
+import clsx from "clsx";
 import {
   showLoading,
   hideLoading,
@@ -10,6 +11,7 @@ import {
   deleteQuestion,
 } from "../../../../actions";
 import { connect } from "react-redux";
+import { mainStyles } from "../../../../styles/styles";
 
 const tableColumns = [
   { title: "Id", field: "id" },
@@ -21,10 +23,15 @@ const useStyles = makeStyles(() => ({
   dataTable: {
     marginTop: "80px",
   },
+  questionCreateMargins: {
+    marginTop: "50px",
+    marginBottom: "30px",
+  },
 }));
 const QuestionList = (props) => {
   const classes = useStyles();
   const history = useHistory();
+  const appStyles = mainStyles();
   const [adminQuestionList, changeAdminQuestionList] = useState([]);
   if (!props.questions) {
     props.showLoading();
@@ -51,6 +58,10 @@ const QuestionList = (props) => {
           variant="outlined"
           color="primary"
           onClick={() => props.history.push("/admin/questions/new")}
+          className={clsx(
+            appStyles.primaryButton,
+            classes.questionCreateMargins
+          )}
         >
           Create Question
         </Button>

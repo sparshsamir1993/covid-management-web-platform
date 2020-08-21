@@ -10,6 +10,8 @@ import {
   deleteHospital,
 } from "../../../../actions";
 import { connect } from "react-redux";
+import { mainStyles } from "../../../../styles/styles";
+import clsx from "clsx";
 
 const tableColumns = [
   { title: "Id", field: "id" },
@@ -23,8 +25,13 @@ const useStyles = makeStyles(() => ({
   dataTable: {
     marginTop: "80px",
   },
+  createButton: {
+    marginTop: "50px",
+    marginBottom: "30px",
+  },
 }));
 const HospitalList = (props) => {
+  let appStyles = mainStyles();
   const classes = useStyles();
   const history = useHistory();
   const [adminHospitalList, changeAdminHospitalList] = useState([]);
@@ -46,11 +53,12 @@ const HospitalList = (props) => {
 
   return (
     <Container maxWidth="lg">
-      <div className={classes.dataTable}>
+      <div className={clsx(classes.dataTable)}>
         <Button
           variant="outlined"
           color="primary"
           onClick={() => props.history.push("/admin/hospitals/new")}
+          className={clsx(appStyles.primaryButton, classes.createButton)}
         >
           Create Hospital
         </Button>

@@ -22,6 +22,9 @@ export const mainStyles = makeStyles(() => ({
   mt25: {
     marginTop: "25px",
   },
+  mt50: {
+    marginTop: "50px",
+  },
   mt100: {
     marginTop: "100px",
   },

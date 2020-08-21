@@ -51,11 +51,13 @@ let QuestionOptionForm = (props) => {
     initialValues,
     input,
   } = props;
+  console.log(initialValues);
   return (
     <form onSubmit={handleSubmit(() => addQuestionOption())}>
       <Field
         name="optionContent"
         component={MaterialTextField}
+        initialValues={initialValues}
         label="Option Content"
       />
       <Field
@@ -96,6 +98,7 @@ let QuestionOptionForm = (props) => {
   );
 };
 const mapStateToProps = (state) => {
+  console.log(state);
   let isCorrectOption;
   if (state.selectedOption.id) {
     isCorrectOption =

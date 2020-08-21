@@ -3,6 +3,7 @@ import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from "react-places-autocomplete";
+import { TextField } from "@material-ui/core";
 // import "../../../styles/main.scss";
 
 class AddressSearchField extends React.Component {
@@ -55,8 +56,8 @@ class AddressSearchField extends React.Component {
       >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
           <div>
-            <label>Address</label>
-            <input
+            {/* <label>Address</label> */}
+            <TextField
               {...getInputProps({
                 placeholder: "Search Places ...",
                 className: "location-search-input",

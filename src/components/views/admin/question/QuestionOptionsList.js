@@ -8,6 +8,8 @@ import {
   ListItemSecondaryAction,
   IconButton,
 } from "@material-ui/core";
+import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
+import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import FolderIcon from "@material-ui/icons/Folder";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
@@ -21,13 +23,18 @@ import {
 import { connect } from "react-redux";
 
 let QuestionOptionList = (props) => {
+  console.log(props.question);
   const [adminQuestionOptionList, changeAdminQuestionOptionList] = useState([]);
+  let { correctOptionId } = props.question;
   const generateOptionItems = (optionList) => {
     return optionList.map((option) => (
       <ListItem key={option.id}>
         <ListItemAvatar>
           <Avatar>
-            <FolderIcon />
+            {correctOptionId == option.id && (
+              <CheckCircleIcon color="primary" />
+            )}
+            {correctOptionId !== option.id && <CheckCircleOutlineIcon />}
           </Avatar>
         </ListItemAvatar>
         <ListItemText
@@ -85,7 +92,7 @@ let QuestionOptionList = (props) => {
   }, [props.options]);
 
   useLayoutEffect(() => {
-    props.getQuestionOptionList(props.questionId);
+    props.getQuestionOptionList(props.question.id);
   }, []);
 
   return <List>{generateOptionItems(adminQuestionOptionList)}</List>;

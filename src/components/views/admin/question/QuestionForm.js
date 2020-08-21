@@ -5,20 +5,35 @@ import MaterialTextField from "../../../utilComponents/MaterialTextField";
 
 import { makeStyles, Button, Divider } from "@material-ui/core";
 import QuestionOptionForm from "./QuestionOptionForm";
+import { mainStyles } from "../../../../styles/styles";
 
 const useStyles = makeStyles(() => ({}));
 
 let QuestionForm = (props) => {
+  let appStyles = mainStyles();
   const classes = useStyles();
-  const { handleSubmit, submitQuestion, submitting, pristine, isEdit } = props;
+  const {
+    handleSubmit,
+    submitQuestion,
+    submitting,
+    pristine,
+    isEdit,
+    initialValues,
+  } = props;
+  // console.log(props);
   return (
     <React.Fragment>
       <form onSubmit={handleSubmit(submitQuestion)}>
-        <Field name="question" component={MaterialTextField} label="Question" />
+        <Field
+          name="question"
+          component={MaterialTextField}
+          initialValues={{ question: initialValues.question }}
+          label="Question"
+        />
         <Button
           variant="contained"
           disabled={pristine || submitting}
-          color="primary"
+          className={appStyles.primaryButton}
           type="submit"
         >
           {isEdit && <span>Update</span>}
