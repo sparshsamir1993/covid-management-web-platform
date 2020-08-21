@@ -11,7 +11,14 @@ export const mainStyles = makeStyles(() => ({
     padding: "0 30px",
     marginTop: "20px",
   },
-  logoutButton: {},
+  logoutButton: {
+    background: "red",
+    marginRight: "20px",
+    color: "white",
+    "&:hover": {
+      color: "black",
+    },
+  },
   ///////////////////////////// global margins //////////////////////////
   marginCenter: {
     margin: "0 auto",

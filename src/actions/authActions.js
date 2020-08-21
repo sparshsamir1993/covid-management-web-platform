@@ -72,4 +72,5 @@ export const logoutUser = () => (dispatch) => {
   }
   dispatch(showAlert({ type: "error", content: "Logged Out !!" }));
   dispatch({ type: "FETCH_USER", payload: {} });
+  window.location.replace("/");
 };

@@ -160,14 +160,14 @@ const Header = (props) => {
             Hospital Admin Links
           </Typography>
           <List>
-            <ListItem button key={"Patient List"} onClick={handleDrawerClose}>
+            {/* <ListItem button key={"Patient List"} onClick={handleDrawerClose}>
               <Link to="/hospital/users" className="nav-link">
                 <ListItemIcon>
                   <InboxIcon />
                 </ListItemIcon>
                 <ListItemText primary={"Pateint List"} />
               </Link>
-            </ListItem>
+            </ListItem> */}
             <ListItem
               button
               key={"Appointment List"}
@@ -232,7 +232,7 @@ const Header = (props) => {
         </List>
         <Divider />
         {adminLinks()}
-        <List>
+        {/* <List>
           <ListItem button key={"Logout"} onClick={handleDrawerClose}>
             <Link to="/" className="nav-link">
               <ListItemIcon>
@@ -241,7 +241,7 @@ const Header = (props) => {
               <ListItemText primary={"Logout"} />
             </Link>
           </ListItem>
-        </List>
+        </List> */}
       </React.Fragment>
     );
   };
