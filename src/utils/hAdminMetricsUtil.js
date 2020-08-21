@@ -11,7 +11,7 @@ export const appointmentToMonthGraphData = (appointments) => {
     let month =
       MONTH_NAMES[new Date(currAppointment.appointmentDate).getMonth()];
     if (!dataToReturn[month]) {
-      dataToReturn[month] = 0;
+      dataToReturn[month] = 1;
     }
     dataToReturn[month] = dataToReturn[month] + 1;
   }

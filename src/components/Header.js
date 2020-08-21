@@ -221,14 +221,14 @@ const Header = (props) => {
               <ListItemText primary={"Dashboard"} />
             </Link>
           </ListItem>
-          <ListItem button key={"Profile"} onClick={handleDrawerClose}>
+          {/* <ListItem button key={"Profile"} onClick={handleDrawerClose}>
             <Link to="/" className="nav-link">
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
               <ListItemText primary={"Profile"} />
             </Link>
-          </ListItem>
+          </ListItem> */}
         </List>
         <Divider />
         {adminLinks()}

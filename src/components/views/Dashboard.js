@@ -32,6 +32,7 @@ class Dashboard extends Component {
   }
 
   async componentDidMount() {
+    console.log(this.props);
     if (this.props.auth?.role) {
       let { role } = this.props.auth;
       // debugger;
@@ -42,9 +43,9 @@ class Dashboard extends Component {
       }
       if (role === ADMIN_ROLE) {
         await this.props.getAdminDashboardMetrics();
+        console.log(this.props.usersToMonthMetrics);
       }
     }
-    console.log(this.props.appointmentToStatusMetrics);
   }
 
   render() {
@@ -103,25 +104,55 @@ class Dashboard extends Component {
         {this.props.auth.role == ADMIN_ROLE && (
           <Grid container spacing={3}>
             <Grid item xs={6}>
-              <LineChart
-                width={730}
-                height={250}
-                data={[]}
-                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+              <ResponsiveContainer
+                width="100%"
+                height="100%"
+                aspect={4.0 / 3.0}
               >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Line
-                  type="monotone"
-                  dataKey="numAppointments"
-                  stroke="#8884d8"
-                />
-              </LineChart>
+                <LineChart
+                  width={730}
+                  height={400}
+                  data={this.props.usersToMonthMetrics}
+                  margin={{ top: 50, right: 30, left: 20, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="month" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Line
+                    type="monotone"
+                    dataKey="Number of users"
+                    stroke="#8884d8"
+                  />
+                </LineChart>
+              </ResponsiveContainer>
             </Grid>
-            <Grid item xs={6}></Grid>
+            <Grid item xs={6}>
+              <ResponsiveContainer
+                width="100%"
+                height="100%"
+                aspect={4.0 / 3.0}
+              >
+                <LineChart
+                  width={730}
+                  height={400}
+                  data={this.props.allAppointmentsToMonthMetrics}
+                  margin={{ top: 50, right: 30, left: 20, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="month" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Line
+                    type="monotone"
+                    dataKey="Number of appointments"
+                    stroke="#8884d8"
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </Grid>
           </Grid>
         )}
       </Container>
@@ -135,6 +166,8 @@ const mapStateToProps = (state) => {
     appointmentToMonthMetrics: state.hospitalAdmin?.metrics?.appointmentToMonth,
     appointmentToStatusMetrics:
       state.hospitalAdmin?.metrics?.appointmentToStatus,
+    usersToMonthMetrics: state?.adminMetrics?.usersToMonth,
+    allAppointmentsToMonthMetrics: state?.adminMetrics?.appointmentToMonth,
   };
 };
 export default connect(mapStateToProps, {
