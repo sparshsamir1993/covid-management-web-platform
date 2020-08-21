@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Container, Grid } from "@material-ui/core";
+import { Button, Container, Grid, Typography } from "@material-ui/core";
 import {
   logoutUser,
   getHospitalAdminDashboardMetrics,
@@ -18,7 +18,8 @@ import {
   PieChart,
   Pie,
 } from "recharts";
-import { HOSPITAL_ADMIN_ROLE, ADMIN_ROLE } from "../../constants";
+import { HOSPITAL_ADMIN_ROLE, ADMIN_ROLE, USER_ROLE } from "../../constants";
+import { mainStyles } from "../../styles/styles";
 
 // const Dashboard = () => {
 
@@ -154,6 +155,11 @@ class Dashboard extends Component {
               </ResponsiveContainer>
             </Grid>
           </Grid>
+        )}
+        {this.props.auth.role == USER_ROLE && (
+          <Typography variant="h4" style={{ marginTop: "100px" }}>
+            Users can just use our mobile app. Sorry.
+          </Typography>
         )}
       </Container>
     );

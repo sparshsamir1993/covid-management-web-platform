@@ -27,7 +27,9 @@ let QuestionForm = (props) => {
         <Field
           name="question"
           component={MaterialTextField}
-          initialValues={{ question: initialValues.question }}
+          initialValues={{
+            question: initialValues?.question ? initialValues.question : [],
+          }}
           label="Question"
         />
         <Button

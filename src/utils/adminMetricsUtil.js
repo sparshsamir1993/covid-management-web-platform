@@ -8,11 +8,10 @@ export const usersToMonthGraphData = (users) => {
     let { createdAt } = currUser;
     let month = MONTH_NAMES[new Date(createdAt).getMonth()];
     if (!data[month]) {
-      data[month] = 1;
+      data[month] = 0;
     }
-    if (data[month]) {
-      data[month] = data[month] + 1;
-    }
+
+    data[month] = data[month] + 1;
   }
   for (let i = 0; i < MONTH_NAMES.length; i++) {
     arrToR.push({
