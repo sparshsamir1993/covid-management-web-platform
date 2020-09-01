@@ -300,7 +300,11 @@ const Header = (props) => {
               <MenuIcon />
             </IconButton>
             <Typography variant="h5" className={classes.title} noWrap>
-              Covid Fighter
+              Covid Fighter -{" "}
+              {props.auth.role == HOSPITAL_ADMIN_ROLE && (
+                <span>Hospital Panel</span>
+              )}
+              {props.auth.role == ADMIN_ROLE && <span>Admin Panel</span>}
             </Typography>
             <HeaderButtons />
           </Toolbar>

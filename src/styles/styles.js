@@ -19,6 +19,9 @@ export const mainStyles = makeStyles(() => ({
       color: "black",
     },
   },
+  raleway: {
+    fontFamily: "Raleway",
+  },
   ///////////////////////////// global margins //////////////////////////
   marginCenter: {
     margin: "0 auto",

@@ -89,6 +89,17 @@ const HospitalList = (props) => {
                 // history.push("/admin/questions/edit", rowData);
               },
             },
+            {
+              icon: tableIcons.RemoveRedEye,
+              tooltip: "Show Hospital detail",
+              onClick: async (event, rowData) => {
+                history.push("/admin/hospitals/detail");
+                // props.showLoading();
+                // await props.deleteHospital(rowData.id);
+                // props.hideLoading();
+                // history.push("/admin/questions/edit", rowData);
+              },
+            },
           ]}
         ></MaterialTable>
       </div>

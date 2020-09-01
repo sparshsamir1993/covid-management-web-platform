@@ -6,13 +6,18 @@ import Header from "./Header";
 import Home from "./views/Home";
 
 import "../styles/main.scss";
+import { ThemeProvider, CssBaseline } from "@material-ui/core";
+import theme from "../styles/theme";
 class App extends Component {
   render() {
     return (
       <div className="app-background">
-        <BrowserRouter>
-          <Header />
-        </BrowserRouter>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <BrowserRouter>
+            <Header />
+          </BrowserRouter>
+        </ThemeProvider>
       </div>
     );
   }
