@@ -4,6 +4,8 @@ import { Grid, makeStyles, Typography } from "@material-ui/core";
 import LoginForm from "../authComponents/LoginForm";
 import SignUpForm from "../authComponents/SignUpForm";
 import { Image } from "@material-ui/icons";
+import { mainStyles } from "../../styles/styles";
+import clsx from "clsx";
 
 const useStyles = makeStyles(() => ({
   logoArea: {
@@ -32,6 +34,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Home = () => {
+  let appStyles = mainStyles();
   const logo = require("../../assets/img/logo.png");
   const [isLogin, setAuthState] = useState(true);
   const classes = useStyles();
@@ -50,6 +53,7 @@ const Home = () => {
           {!isLogin && <SignUpForm />}
           <Typography
             variant="subtitle1"
+            className={clsx(appStyles.mt25, appStyles.raleway)}
             onClick={() => setAuthState(!isLogin)}
           >
             {isLogin

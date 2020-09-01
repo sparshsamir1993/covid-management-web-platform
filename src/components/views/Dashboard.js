@@ -157,7 +157,10 @@ class Dashboard extends Component {
           </Grid>
         )}
         {this.props.auth.role == USER_ROLE && (
-          <Typography variant="h4" style={{ marginTop: "100px" }}>
+          <Typography
+            variant="h4"
+            style={{ marginTop: "100px", fontFamily: "Raleway" }}
+          >
             Users can just use our mobile app. Sorry.
           </Typography>
         )}

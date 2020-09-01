@@ -5,12 +5,14 @@ import { Field, reduxForm, SubmissionError, stopSubmit } from "redux-form";
 import { FormField } from "./FormField";
 import { connect } from "react-redux";
 import { loginUser, showLoading, hideLoading } from "../../actions";
+import { mainStyles } from "../../styles/styles";
 
 const LinkBehavior = React.forwardRef((props, ref) => (
   <Link ref={ref} to="/aa" {...props} />
 ));
 
 let LoginForm = (props) => {
+  let appStyles = mainStyles();
   let history = useHistory();
   const submitLogin = async (values, dispatch) => {
     let { email, password } = values;
@@ -27,11 +29,11 @@ let LoginForm = (props) => {
   const { error, handleSubmit, pristine, reset, submitting } = props;
   return (
     <form onSubmit={handleSubmit(submitLogin)}>
-      <Typography variant="h4" gutterBottom>
-        Log into Hospital Dashboard
+      <Typography variant="h4" gutterBottom style={{ fontFamily: "Raleway" }}>
+        Sign in
       </Typography>
       <Grid container spacing={3}>
-        <Grid item xs={12}>
+        <Grid item xs={12} className={appStyles.mt25}>
           <Field
             key="email"
             type="email"
@@ -41,7 +43,7 @@ let LoginForm = (props) => {
           />
         </Grid>
       </Grid>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} className={appStyles.mt25}>
         <Grid item xs={12}>
           <Field
             key="password"
@@ -57,7 +59,12 @@ let LoginForm = (props) => {
           <strong>{error}</strong>
         </div>
       )}
-      <Button type="submit" disabled={submitting} variant="outlined">
+      <Button
+        className={appStyles.mt25}
+        type="submit"
+        disabled={submitting}
+        variant="outlined"
+      >
         Log in
       </Button>
     </form>
